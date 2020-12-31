@@ -7,10 +7,16 @@
 </head>
 
 <body>
-    <div>
-        <label for="html-input-box">Input HTML below:</label><br><br>
-        <textarea id="html-input-box" style="width: 50vw; height: 85vh;"></textarea><br><br>
-        <input type="submit" value="Visualize" onclick="console.log(document.getElementById('html-input-box').value)">
+    <div class="flex-container" style="display:flex; flex-direction: row;">
+        <div style="padding-right: 2.5vw;">
+            <label for="html-input-box">Input HTML below:</label><br><br>
+            <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
+            <input type="submit" value="Visualize" onclick="document.getElementById('placeholder-output').textContent = document.getElementById('html-input-box').value">
+        </div>
+        <div style="padding-left: 2.5vw;">
+            <label for="dom-tree-output">DOM Tree View</label><br><br>
+            <p id="placeholder-output"></p>
+        </div>
     </div>
 </body>
 
