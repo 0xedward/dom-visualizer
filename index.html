@@ -2,16 +2,135 @@
 <html lang="en">
 
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js" integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw==" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3-hierarchy.v2.min.js"></script>
     <meta charset="utf-8">
     <title>DOM Visualizer</title>
+    <style>
+
+        .node circle {
+          fill: #fff;
+          stroke: steelblue;
+          stroke-width: 3px;
+        }
+
+        .node text { font: 12px sans-serif; }
+
+        .link {
+          fill: none;
+          stroke: #ccc;
+          stroke-width: 2px;
+        }
+
+    </style>
 </head>
+
+<script>function blah(){
+    const treeData =   [{
+    "name": "Top Node",
+    "children": [
+      {
+        "name": "Bob: Child of Top Node",
+        "parent": "Top Node",
+        "children": [
+          {
+            "name": "Son of Bob",
+            "parent": "Bob: Child of Top Node"
+          },
+          {
+            "name": "Daughter of Bob",
+            "parent": "Bob: Child of Top Node"
+          }
+        ]
+      },
+      {
+        "name": "Sally: Child of Top Node",
+        "parent": "Top Node"
+      }
+    ]
+  }];
+
+let root = treeData[0];
+
+update(root);
+}
+
+function update(root) {
+      //Below generates the visualized tree diagram
+  var margin = {top: 20, right: 120, bottom: 20, left: 120},
+ width = 960 - margin.right - margin.left,
+ height = 500 - margin.top - margin.bottom;
+var i = 0;
+
+ var diagonal = function link(d) {
+  return "M" + d.source.x + "," + d.source.y
+      + "C" + (d.source.x + d.target.x) / 2 + "," + d.source.y
+      + " " + (d.source.x + d.target.x) / 2 + "," + d.target.y
+      + " " + d.target.x + "," + d.target.y;
+};
+
+
+ var svg = d3.select("body").append("svg")
+ .attr("width", width + margin.right + margin.left)
+ .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+ .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+ var margin = {top: 20, right: 120, bottom: 20, left: 120},
+ width = 960 - margin.right - margin.left,
+ height = 500 - margin.top - margin.bottom;
+ var tree = d3.tree()
+ .size([height, width]);
+  // Compute the new tree layout.
+ const treeRoot = d3.hierarchy(root)
+ tree(treeRoot)
+// nodes
+ const nodes = treeRoot.descendants()
+// links
+ const links = treeRoot.links()
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 100; });
+
+  // Declare the nodesâ€¦
+  var node = svg.selectAll("g.node")
+   .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+   .attr("class", "node")
+   .attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")"; });
+
+  nodeEnter.append("circle")
+   .attr("r", 10)
+   .style("fill", "#fff");
+
+   nodeEnter.append("text")
+   .attr("y", function(d) {
+    return d.children || d._children ? -18 : 18; })
+   .attr("dy", ".35em")
+   .attr("text-anchor", "middle")
+   .text(function(d) { return d.name; })
+   .style("fill-opacity", 1);
+
+  // Declare the linksâ€¦
+  var link = svg.selectAll("path.link")
+   .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+   .attr("class", "link")
+   .attr("d", diagonal);
+}
+
+</script>
 
 <body>
     <div class="flex-container" style="display:flex; flex-direction: row;">
         <div style="padding-right: 2.5vw;">
             <label for="html-input-box">Input HTML below:</label><br><br>
             <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
-            <input type="submit" value="Visualize" onclick="document.getElementById('placeholder-output').textContent = document.getElementById('html-input-box').value">
+            <input type="submit" value="Visualize" onclick=blah()>
         </div>
         <div style="padding-left: 2.5vw;">
             <label for="dom-tree-output">DOM Tree View</label><br><br>
