@@ -1,0 +1,21 @@
+{
+  "name": "eqkl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0xedward/EQKL.git"
+  },
+  "author": "0xedward",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0xedward/EQKL/issues"
+  },
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
