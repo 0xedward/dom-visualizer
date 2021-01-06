@@ -27,37 +27,38 @@
 
 <script>function blah(){
     const treeData =   [{
-    "name": "Top Node",
+    "name": "HTML",
     "children": [
       {
-        "name": "Bob: Child of Top Node",
-        "parent": "Top Node",
+        "name": "Body",
+        "parent": "HTML",
         "children": [
           {
-            "name": "Son of Bob",
-            "parent": "Bob: Child of Top Node"
+            "name": "TR1",
+            "parent": "Body"
           },
           {
-            "name": "Daughter of Bob",
-            "parent": "Bob: Child of Top Node"
+            "name": "TR2",
+            "parent": "Body"
           }
         ]
       },
       {
-        "name": "Sally: Child of Top Node",
-        "parent": "Top Node"
+        "name": "Head",
+        "parent": "HTML",
+        "children": [{
+          "name": "Script"
+        }]
       }
     ]
   }];
-
 let root = treeData[0];
-
 update(root);
 }
 
 function update(root) {
       //Below generates the visualized tree diagram
-  var margin = {top: 20, right: 120, bottom: 20, left: 120},
+  var margin = {top: 30, right: 120, bottom: 20, left: 120},
  width = 960 - margin.right - margin.left,
  height = 500 - margin.top - margin.bottom;
 var i = 0;
@@ -107,13 +108,14 @@ var i = 0;
 
    nodeEnter.append("text")
    .attr("y", function(d) {
+     console.log(d)
     return d.children || d._children ? -18 : 18; })
    .attr("dy", ".35em")
    .attr("text-anchor", "middle")
-   .text(function(d) { return d.name; })
-   .style("fill-opacity", 1);
+   .text(function(d) { return d.data.name; })
+   .style("fill", "black");
 
-  // Declare the linksâ€¦
+  // Declare the links
   var link = svg.selectAll("path.link")
    .data(links, function(d) { return d.target.id; });
 
