@@ -4,6 +4,7 @@
 <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js" integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw==" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3-hierarchy.v2.min.js"></script>
+    <script src="visualize.js"></script>
     <meta charset="utf-8">
     <title>DOM Visualizer</title>
     <style>
@@ -25,114 +26,12 @@
     </style>
 </head>
 
-<script>function blah(){
-    const treeData =   [{
-    "name": "HTML",
-    "children": [
-      {
-        "name": "Body",
-        "parent": "HTML",
-        "children": [
-          {
-            "name": "TR1",
-            "parent": "Body"
-          },
-          {
-            "name": "TR2",
-            "parent": "Body"
-          }
-        ]
-      },
-      {
-        "name": "Head",
-        "parent": "HTML",
-        "children": [{
-          "name": "Script"
-        }]
-      }
-    ]
-  }];
-let root = treeData[0];
-update(root);
-}
-
-function update(root) {
-      //Below generates the visualized tree diagram
-  var margin = {top: 30, right: 120, bottom: 20, left: 120},
- width = 960 - margin.right - margin.left,
- height = 500 - margin.top - margin.bottom;
-var i = 0;
-
- var diagonal = function link(d) {
-  return "M" + d.source.x + "," + d.source.y
-      + "C" + (d.source.x + d.target.x) / 2 + "," + d.source.y
-      + " " + (d.source.x + d.target.x) / 2 + "," + d.target.y
-      + " " + d.target.x + "," + d.target.y;
-};
-
-
- var svg = d3.select("div#output-container").append("svg")
- .attr("width", width + margin.right + margin.left)
- .attr("height", height + margin.top + margin.bottom)
-  .append("g")
- .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
- var margin = {top: 20, right: 120, bottom: 20, left: 120},
- width = 960 - margin.right - margin.left,
- height = 500 - margin.top - margin.bottom;
- var tree = d3.tree()
- .size([height, width]);
-  // Compute the new tree layout.
- const treeRoot = d3.hierarchy(root)
- tree(treeRoot)
-// nodes
- const nodes = treeRoot.descendants()
-// links
- const links = treeRoot.links()
-
-  // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 100; });
-
-  // Declare the nodesâ€¦
-  var node = svg.selectAll("g.node")
-   .data(nodes, function(d) { return d.id || (d.id = ++i); });
-
-  // Enter the nodes.
-  var nodeEnter = node.enter().append("g")
-   .attr("class", "node")
-   .attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")"; });
-
-  nodeEnter.append("circle")
-   .attr("r", 10)
-   .style("fill", "#fff");
-
-   nodeEnter.append("text")
-   .attr("y", function(d) {
-     console.log(d)
-    return d.children || d._children ? -18 : 18; })
-   .attr("dy", ".35em")
-   .attr("text-anchor", "middle")
-   .text(function(d) { return d.data.name; })
-   .style("fill", "black");
-
-  // Declare the links
-  var link = svg.selectAll("path.link")
-   .data(links, function(d) { return d.target.id; });
-
-  // Enter the links.
-  link.enter().insert("path", "g")
-   .attr("class", "link")
-   .attr("d", diagonal);
-}
-
-</script>
-
 <body>
     <div style="display:flex; flex-direction: row;">
         <div style="padding-right: 2.5vw;">
             <label for="html-input-box">Input HTML below:</label><br><br>
             <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
-            <input type="submit" value="Visualize" onclick=blah()>
+            <input type="submit" value="Visualize" onclick=treeVisualizer()>
         </div>
         <div id="output-container" style="padding-left: 2.5vw;">
             <p>DOM Tree View</p><br><br>
