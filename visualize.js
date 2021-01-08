@@ -1,34 +1,4 @@
-function treeVisualizer() {
-  var treeData = [
-    {
-      name: "HTML",
-      children: [
-        {
-          name: "Body",
-          parent: "HTML",
-          children: [
-            {
-              name: "TR1",
-              parent: "Body",
-            },
-            {
-              name: "TR2",
-              parent: "Body",
-            },
-          ],
-        },
-        {
-          name: "Head",
-          parent: "HTML",
-          children: [
-            {
-              name: "Script",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+function treeVisualizer(treeData) {
   let root = treeData[0];
   update(root);
 }
@@ -92,6 +62,7 @@ function update(root) {
     .attr("transform", function (d) {
       return "translate(" + d.x + "," + d.y + ")";
     });
+  console.log(d.x);
 
   nodeEnter.append("circle").attr("r", 10).style("fill", "#fff");
 
