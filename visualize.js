@@ -1,4 +1,34 @@
-function treeVisualizer(treeData) {
+function treeVisualizer() {
+  const treeData = [
+    {
+      name: "HTML",
+      children: [
+        {
+          name: "Body",
+          parent: "HTML",
+          children: [
+            {
+              name: "TR1",
+              parent: "Body",
+            },
+            {
+              name: "TR2",
+              parent: "Body",
+            },
+          ],
+        },
+        {
+          name: "Head",
+          parent: "HTML",
+          children: [
+            {
+              name: "Script",
+            },
+          ],
+        },
+      ],
+    },
+  ];
   let root = treeData[0];
   update(root);
 }
@@ -37,10 +67,7 @@ function update(root) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  var margin = { top: 20, right: 120, bottom: 20, left: 120 },
-    width = 960 - margin.right - margin.left,
-    height = 500 - margin.top - margin.bottom;
-  var tree = d3.treemap().size([height, width]);
+  var tree = d3.tree().size([height, width]);
 
   const treeRoot = d3.hierarchy(root);
   tree(treeRoot);
