@@ -1,7 +1,10 @@
 {
   "name": "eqkl",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "js/index.js",
+  "scripts": {
+    "start": "live-server --verbose"
+  },
   "directories": {
     "test": "tests"
   },
@@ -16,6 +19,7 @@
   },
   "devDependencies": {
     "eslint": "^7.17.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "live-server": "1.2.1"
   }
 }
