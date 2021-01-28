@@ -13,10 +13,11 @@
     "url": "git+https://github.com/0xedward/EQKL.git"
   },
   "author": "0xedward",
-  "license": "ISC",
+  "contributors": "kelvinlin97",
   "bugs": {
     "url": "https://github.com/0xedward/EQKL/issues"
   },
+  "homepage": "https://github.com/0xedward/EQKL#readme"
   "devDependencies": {
     "eslint": "^7.17.0",
     "eslint-config-google": "^0.14.0",

@@ -2,8 +2,25 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>DOM Visualizer</title>
+  <meta charset="utf-8">
+  <title>DOM Visualizer</title>
+  <style>
+
+        .node circle {
+          fill: #fff;
+          stroke: steelblue;
+          stroke-width: 3px;
+        }
+
+        .node text { font: 12px sans-serif; }
+
+        .link {
+          fill: none;
+          stroke: #ccc;
+          stroke-width: 2px;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -19,6 +36,10 @@
     </div>
 
 <script src="js/index.js"></script>
+<script src="visualize.js"></script>
+          
+<script defer src="https://d3js.org/d3-hierarchy.v2.min.js" integrity="sha384-MdaUeYF7gHVN8QFU257bd8KI0ROof9MWr+gcDkF7U/B06AnkV7ySOAkPyOZac9Uh" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js" integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw==" crossorigin="anonymous"></script>
 
 </body>
 
