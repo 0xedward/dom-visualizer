@@ -24,19 +24,23 @@
 </head>
 
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js" integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw==" crossorigin="anonymous"></script>
-  <script src="https://d3js.org/d3-hierarchy.v2.min.js"></script>
-  <script src="visualize.js"></script>
-  <div style="display:flex; flex-direction: row;">
-    <div style="padding-right: 2.5vw;">
-      <label for="html-input-box">Input HTML below:</label><br><br>
-      <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
-      <input type="submit" value="Visualize" onclick=treeVisualizer()>
+    <div style="display:flex; flex-direction: row;">
+        <div style="padding-right: 2.5vw;">
+            <label for="html-input-box">Input HTML below:</label><br><br>
+            <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
+            <button id="visualize-btn" type="button" onclick="parseHTML(document.getElementById('html-input-box').value)">Visualize</button>
         </div>
-        <div id="output-container" style="padding-left: 2.5vw;">
-            <p>DOM Tree View</p><br><br>
+        <div style="padding-left: 2.5vw;">
+            <label for="dom-tree-output">DOM Tree View</label><br><br>
         </div>
     </div>
+
+<script src="js/index.js"></script>
+<script src="visualize.js"></script>
+          
+<script defer src="https://d3js.org/d3-hierarchy.v2.min.js" integrity="sha384-MdaUeYF7gHVN8QFU257bd8KI0ROof9MWr+gcDkF7U/B06AnkV7ySOAkPyOZac9Uh" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js" integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw==" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
