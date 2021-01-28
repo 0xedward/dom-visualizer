@@ -2,22 +2,50 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>DOM Visualizer</title>
+  <meta charset="utf-8">
+  <title>DOM Visualizer</title>
+  <style>
+    .node circle {
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 3px;
+    }
+
+    .node text {
+      font: 12px sans-serif;
+    }
+
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 2px;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="flex-container" style="display:flex; flex-direction: row;">
-        <div style="padding-right: 2.5vw;">
-            <label for="html-input-box">Input HTML below:</label><br><br>
-            <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
-            <input type="submit" value="Visualize" onclick="document.getElementById('placeholder-output').textContent = document.getElementById('html-input-box').value">
-        </div>
-        <div style="padding-left: 2.5vw;">
-            <label for="dom-tree-output">DOM Tree View</label><br><br>
-            <p id="placeholder-output"></p>
-        </div>
+  <div style="display:flex; flex-direction: row;">
+    <div style="padding-right: 2.5vw;">
+      <label for="html-input-box">Input HTML below:</label><br><br>
+      <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
+      <button id="visualize-btn" type="button"
+        onclick="generateDOMTree(document.getElementById('html-input-box').value)">Visualize</button>
     </div>
+    <div id="output-container" style="padding-left: 2.5vw;">
+      <label for="dom-tree-output">DOM Tree View</label><br><br>
+    </div>
+  </div>
+
+  <script src="js/index.js"></script>
+  <script src="js/visualize.js"></script>
+
+  <script defer src="https://d3js.org/d3-hierarchy.v2.min.js"
+    integrity="sha384-MdaUeYF7gHVN8QFU257bd8KI0ROof9MWr+gcDkF7U/B06AnkV7ySOAkPyOZac9Uh" crossorigin="anonymous">
+  </script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js"
+    integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw=="
+    crossorigin="anonymous"></script>
+
 </body>
 
 </html>
