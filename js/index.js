@@ -1,6 +1,17 @@
 /* eslint-disable require-jsdoc */
 'use strict';
 
+function generateDOMTree(userInputString) {
+  const parserOutputNode = parseHTML(userInputString);
+  if (parserOutputNode !== null) {
+    const d3TreeData = levelOrderTraversal(parserOutputNode);
+    const DOMTreeRootNode = d3TreeData[0];
+    createAndAppendDOMTree(DOMTreeRootNode);
+  } else {
+    // TODO remove this exception when we add try catch block to parseHTML
+    throw new Error('DOMParser failed to parse user input string');
+  }
+}
 // eslint-disable-next-line no-unused-vars
 function parseHTML(userInputString) {
   if (userInputString !== '') {
@@ -8,9 +19,9 @@ function parseHTML(userInputString) {
     const parser = new DOMParser();
     // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
     const htmlDocument = parser.parseFromString(userInputString, 'text/html');
-    const node = htmlDocument.documentElement;
-    const nodeListLevelOrder = levelOrderTraversal(node);
+    return htmlDocument.documentElement;
   }
+  return null;
 }
 
 function levelOrderTraversal(rootNode) {
