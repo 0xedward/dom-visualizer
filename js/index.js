@@ -9,9 +9,10 @@ function parseHTML(userInputString) {
     // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
     const htmlDocument = parser.parseFromString(userInputString, "text/html");
     const node = htmlDocument.documentElement;
-    // console.log(node.children[0].children[0].children.length);
+    console.log(node);
     const nodeListLevelOrder = levelOrderTraversal(node);
     console.log(nodeListLevelOrder);
+    console.log(nodeListLevelOrder[0].children[1].children[0]);
   }
 }
 
@@ -24,10 +25,10 @@ function levelOrderTraversal(rootNode) {
 
   function search(node, childrenArr) {
     console.log(`Current Node: ${node.tagName}`);
+    console.log("Parent Node:", node.parentNode.nodeName);
     console.log(node);
     console.log("# of nodes to insert:", node.children.length);
-    console.log("Parent Node:", node.parentNode.nodeName);
-    console.log("Children Array before insert", childrenArr);
+    console.log("Before insert", childrenArr);
     console.log("Level ->", counter);
     if (node !== undefined) {
       const isLeaf = node.children.length === 0;
@@ -36,21 +37,42 @@ function levelOrderTraversal(rootNode) {
           name: node.tagName,
           parent: node.parentNode.tagName,
           children: [],
+          obj: node,
         });
-        console.log("children array insertion", childrenArr);
+        console.log("After insert", childrenArr);
       } else if (isLeaf) {
         childrenArr.push({
           name: node.tagName,
+          parent: node.parentNode.tagName, //TODO do we need this reference?
+          obj: node,
         });
       }
       if (!isLeaf) {
         for (let i = 0; i < node.children.length; i++) {
           if (node.parentNode.nodeName !== "#document") {
-            console.log("Children Array before search", childrenArr.children);
-            search(node.children[i], childrenArr.children);
+            console.log("Before next search", childrenArr.children);
+            // search(node.children[i], childrenArr.children);
+            let parentIndex = -1;
+            for (let j = 0; j < childrenArr.length; j++) {
+              console.log("Parent name in array", childrenArr[j].name);
+              console.log("Parent in tree", node.parentNode.tagName);
+              if (childrenArr[j].obj === node) {
+                parentIndex = j;
+                break;
+              }
+              // if (childrenArr[j].name === node.tagName) {
+              //   parentIndex = j;
+              //   break;
+              // }
+            }
+            if (parentIndex == -1) {
+              console.log("FUCK")
+              return;
+            }
+            search(node.children[i], childrenArr[parentIndex].children);
             counter += 1;
           } else {
-            console.log("Children Array before search", childrenArr);
+            console.log("Root before next search", childrenArr);
             search(node.children[i], childrenArr);
             counter += 1;
           }
@@ -63,67 +85,121 @@ function levelOrderTraversal(rootNode) {
   return array;
 }
 
-// function JSONConverter(rootNode) {
-//   //rootNode is HTML tag
-//   const array = [];
-
-//   //rootNode = <script>
-
-//   if (rootNode.children === undefined) {
-//     let arr
-//     while(array.children !== undefined){
-//       let arr = array.children
-//     }
-
-//     array[array.length - 1]children.push({
-//       name: rootNode.tagName,
-//       parent: array[array.length - 1].tagName,
-//     });
-//   }
-
-//   if (rootNode.children !== undefined) {
-//     array.push({ name: rootNode.tagName, children: [] });
-
-//     for (let i = 0; i < rootNode.children.length; i++) {
-//       array[array.length - 1].children.push({
-//         name: rootNode.children[i].tagName,
-//         parent: rootNode.tagName,
-//         children: [],
-//       });
-
-//       JSONConverter(rootNode.children[i]);
-//     }
-//   }
-
-//   return array;
-// }
 
 // [
 //   {
 //     name: "HTML",
 //     children: [
 //       {
-//         name: "Body",
-//         parent: "HTML",
-//         children: [
-//           {
-//             name: "TR1",
-//             parent: "Body",
-//           },
-//           {
-//             name: "TR2",
-//             parent: "Body",
-//           },
-//         ],
-//       },
-//       {
 //         name: "Head",
 //         parent: "HTML",
 //         children: [
 //           {
 //             name: "Script",
+//             parent: "Head",
 //           },
 //         ],
+//       },
+//       {
+//         name: "Body",
+//         parent: "HTML",
+//         children: [
+//           {
+//             name: "p",
+//             parent: "Body"
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ];
 
-//Helper method takes in next node and determines how to modify it/how to push it
-//Nodes go from HTML --> HEAD/BODY --> SCRIPT/P
+// [
+//   {
+//     name: "HTML",
+//     children: [
+//       {
+//         name: "Head",
+//         parent: "HTML",
+//         children: [
+//           {
+//             name: "Meta",
+//             parent: "Head",
+//           },
+//           {
+//             name: "Title",
+//             parent: "Head",
+//           },
+//         ],
+//       },
+//       {
+//         name: "Body",
+//         parent: "HTML",
+//         children: [
+//           {
+//             name: "div",
+//             parent: "Body",
+//             children: [
+//               {
+//                 name: "div",
+//                 parent: "div",
+//                 children: [
+//                   {
+//                     name: "label",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "textarea",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "button",
+//                     parent: "div",
+//                   },
+//                 ],
+//               },
+//               {
+//                 name: "div",
+//                 parent: "div",
+//                 children: [
+//                   {
+//                     name: "label",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                   {
+//                     name: "br",
+//                     parent: "div",
+//                   },
+//                 ],
+//               },
+//             ],
+//           },
+//           {
+//             name: "Script",
+//             parent: "Body"
+//           }
+//         ],
+//       },
+//     ],
+//   },
+// ];
