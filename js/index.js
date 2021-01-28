@@ -9,32 +9,52 @@ function parseHTML(userInputString) {
     // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
     const htmlDocument = parser.parseFromString(userInputString, "text/html");
     const node = htmlDocument.documentElement;
+    // console.log(node.children[0].children[0].children.length);
     const nodeListLevelOrder = levelOrderTraversal(node);
     console.log(nodeListLevelOrder);
   }
 }
 
 function levelOrderTraversal(rootNode) {
-  const array = [];
-  search(rootNode, 1);
+  const array = [{ name: "HTML", children: [] }];
+  // console.log(rootNode);
+  // console.log(array[0].children);
+  let counter = 0;
+  search(rootNode, array[0].children);
 
-  function search(root, level) {
-    if (root !== undefined) {
-      if (array.length < level) {
-        array.push([]);
+  function search(node, childrenArr) {
+    console.log(`Current Node: ${node.tagName}`);
+    console.log(node);
+    console.log("# of nodes to insert:", node.children.length);
+    console.log("Parent Node:", node.parentNode.nodeName);
+    console.log("Children Array before insert", childrenArr);
+    console.log("Level ->", counter);
+    if (node !== undefined) {
+      const isLeaf = node.children.length === 0;
+      if (node.parentNode.nodeName !== "#document") {
+        childrenArr.push({
+          name: node.tagName,
+          parent: node.parentNode.tagName,
+          children: [],
+        });
+        console.log("children array insertion", childrenArr);
+      } else if (isLeaf) {
+        childrenArr.push({
+          name: node.tagName,
+        });
       }
-      const arr = array[level - 1];
-      arr.push({ name: root.tagName });
-
-      if (level === 1) {
-      }
-
-      if (root.children !== undefined) {
-        arr[arr.length - 1].children = [];
-      }
-
-      for (let i = 0; i < root.children.length; i++) {
-        search(root.children[i], level + 1);
+      if (!isLeaf) {
+        for (let i = 0; i < node.children.length; i++) {
+          if (node.parentNode.nodeName !== "#document") {
+            console.log("Children Array before search", childrenArr.children);
+            search(node.children[i], childrenArr.children);
+            counter += 1;
+          } else {
+            console.log("Children Array before search", childrenArr);
+            search(node.children[i], childrenArr);
+            counter += 1;
+          }
+        }
       }
     } else {
       return;
@@ -77,3 +97,33 @@ function levelOrderTraversal(rootNode) {
 
 //   return array;
 // }
+
+// [
+//   {
+//     name: "HTML",
+//     children: [
+//       {
+//         name: "Body",
+//         parent: "HTML",
+//         children: [
+//           {
+//             name: "TR1",
+//             parent: "Body",
+//           },
+//           {
+//             name: "TR2",
+//             parent: "Body",
+//           },
+//         ],
+//       },
+//       {
+//         name: "Head",
+//         parent: "HTML",
+//         children: [
+//           {
+//             name: "Script",
+//           },
+//         ],
+
+//Helper method takes in next node and determines how to modify it/how to push it
+//Nodes go from HTML --> HEAD/BODY --> SCRIPT/P
