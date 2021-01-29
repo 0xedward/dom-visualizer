@@ -1,6 +1,6 @@
 // eslint-disable-next-line require-jsdoc
-let initialized = false;
 
+let initialized = false;
 function createAndAppendDOMTree(root) {
   if (initialized === false) {
     const margin = { top: 30, right: 120, bottom: 20, left: 120 };
