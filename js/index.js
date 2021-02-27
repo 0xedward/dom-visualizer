@@ -4,14 +4,13 @@
 function get(name) {
   if (
     (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
-      location.search
+      window.location.search
     ))
   )
     return decodeURIComponent(name[1]);
 }
 
 function getUserParameter() {
-  //window.location receives
   if (window.location.search !== "") {
     const userParameter = get(window.location.search);
     document.addEventListener("DOMContentLoaded", () => {
@@ -20,14 +19,19 @@ function getUserParameter() {
   }
 }
 
-getUserParameter();
-
+let initialized = false;
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData[0];
-    createAndAppendDOMTree(DOMTreeRootNode);
+    if (initialized === false) {
+      createAndAppendDOMTree(DOMTreeRootNode);
+      initialized = true;
+    } else {
+      removeNodes();
+      createAndAppendDOMTree(DOMTreeRootNode);
+    }
   } else {
     // TODO remove this exception when we add try catch block to parseHTML
     throw new Error("DOMParser failed to parse user input string");
