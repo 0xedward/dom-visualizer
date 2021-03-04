@@ -13,7 +13,9 @@
     "url": "git+https://github.com/0xedward/EQKL.git"
   },
   "author": "0xedward",
-  "contributors": ["kelvinlin97"],
+  "contributors": [
+    "kelvinlin97"
+  ],
   "bugs": {
     "url": "https://github.com/0xedward/EQKL/issues"
   },
@@ -22,5 +24,8 @@
     "eslint": "^7.17.0",
     "eslint-config-google": "^0.14.0",
     "live-server": "1.2.1"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.0.0-beta.1"
   }
 }

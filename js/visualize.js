@@ -1,11 +1,9 @@
-// eslint-disable-next-line require-jsdoc
+// // eslint-disable-next-line require-jsdoc
 
 function createAndAppendDOMTree(root) {
   const margin = { top: 100, right: 200, bottom: 30, left: 100 };
   const width = 960 - margin.right - margin.left;
   const height = 500 - margin.top - margin.bottom;
-  let i = 0;
-
   const svg = d3
     .select("div#output-container")
     .append("svg")
@@ -14,8 +12,17 @@ function createAndAppendDOMTree(root) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  update(root, svg);
+}
+
+function update(source, svg) {
+  const duration = 750;
+  const margin = { top: 100, right: 200, bottom: 30, left: 100 };
+  const width = 960 - margin.right - margin.left;
+  const height = 500 - margin.top - margin.bottom;
+  let i = 0;
   const tree = d3.tree().size([height, width]);
-  const treeRoot = d3.hierarchy(root);
+  const treeRoot = d3.hierarchy(source);
   tree(treeRoot);
   const nodes = treeRoot.descendants();
   nodes.forEach(function (d) {
@@ -25,7 +32,6 @@ function createAndAppendDOMTree(root) {
   const node = svg.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = i++);
   });
-
   const nodeEnter = node
     .enter()
     .append("g")
@@ -33,7 +39,7 @@ function createAndAppendDOMTree(root) {
     .attr("transform", function (d) {
       return "translate(" + d.x + "," + d.y + ")";
     })
-    .on("collapseNodes", collapseNodes);
+    .on("click", clickNodes);
 
   nodeEnter.append("circle").attr("r", 10).style("fill", "#fff");
 
@@ -53,12 +59,30 @@ function createAndAppendDOMTree(root) {
     return d.target.id;
   });
 
-  link
+  const linkEnter = link
     .enter()
     .insert("path", "g")
     .attr("class", "link")
     .attr("d", createDiagonal);
+
+  const linkUpdate = linkEnter
+    .merge(link)
+    .attr("fill", "none")
+    .attr("stroke", "#ccc")
+    .attr("stroke-width", "2px");
+
+  linkUpdate.transition().duration(duration).attr("d", createDiagonal);
+
+  link
+    .exit()
+    .transition()
+    .duration(duration)
+    .attr("transform", function (d) {
+      return "translate(" + source.y + "," + source.x + ")";
+    })
+    .remove();
 }
+
 function createDiagonal(d) {
   return (
     "M" +
@@ -80,7 +104,11 @@ function createDiagonal(d) {
   );
 }
 
-function collapseNodes(d) {
+function removeNodes() {
+  d3.select("svg").remove();
+}
+
+function clickNodes(d) {
   if (d.children) {
     d._children = d.children;
     d.children = null;
@@ -88,9 +116,5 @@ function collapseNodes(d) {
     d.children = d._children;
     d._children = null;
   }
-  createAndAppendDOMTree(d);
-}
-
-function removeNodes() {
-  d3.select("svg").remove();
+  update(d);
 }
