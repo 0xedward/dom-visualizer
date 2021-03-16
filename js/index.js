@@ -25,12 +25,13 @@ function generateDOMTree(userInputString) {
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData[0];
+    let DOM;
     if (initialized === false) {
-      createAndAppendDOMTree(DOMTreeRootNode);
+      DOM = new DOMTree(DOMTreeRootNode);
       initialized = true;
     } else {
-      removeNodes();
-      createAndAppendDOMTree(DOMTreeRootNode);
+      d3.select("svg").remove();
+      DOM = new DOMTree(DOMTreeRootNode)
     }
   } else {
     // TODO remove this exception when we add try catch block to parseHTML

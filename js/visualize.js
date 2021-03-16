@@ -1,23 +1,30 @@
 // // eslint-disable-next-line require-jsdoc
 
-function createAndAppendDOMTree(root) {
-  const margin = { top: 100, right: 200, bottom: 30, left: 100 };
-  const width = 960 - margin.right - margin.left;
-  const height = 500 - margin.top - margin.bottom;
-  const svg = d3
+//Refactor into class
+
+class DOMTree {
+  constructor(data){
+    this.data = data;
+    this.createAndAppendDOMTree(data)
+  }
+
+  createAndAppendDOMTree(root){
+    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
+    const width = 960 - margin.right - margin.left;
+    const height = 500 - margin.top - margin.bottom;
+    this.plot = d3
     .select("div#output-container")
     .append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    this.update(root);
+  }
 
-  update(root, svg);
-}
-
-function update(source, svg) {
-  const duration = 750;
-  const margin = { top: 100, right: 200, bottom: 30, left: 100 };
+  update(source) {
+    const duration = 750;
+    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
   const width = 960 - margin.right - margin.left;
   const height = 500 - margin.top - margin.bottom;
   let i = 0;
@@ -29,7 +36,7 @@ function update(source, svg) {
     d.y = d.depth * 100;
   });
   const links = treeRoot.links();
-  const node = svg.selectAll("g.node").data(nodes, function (d) {
+  const node = this.plot.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = i++);
   });
   const nodeEnter = node
@@ -38,10 +45,23 @@ function update(source, svg) {
     .attr("class", "node")
     .attr("transform", function (d) {
       return "translate(" + d.x + "," + d.y + ")";
+    }).on("click", (d) => {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      this.update(d);
     })
-    .on("click", clickNodes);
 
-  nodeEnter.append("circle").attr("r", 10).style("fill", "#fff");
+    nodeEnter.append('circle')
+    .attr('class', 'node')
+    .attr('r', 1e-6)
+    .style("fill", function(d) {
+        return d._children ? "lightsteelblue" : "#fff";
+    });
 
   nodeEnter
     .append("text")
@@ -55,7 +75,7 @@ function update(source, svg) {
     })
     .style("fill", "black");
 
-  const link = svg.selectAll("path.link").data(links, function (d) {
+  const link = this.plot.selectAll("path.link").data(links, function (d) {
     return d.target.id;
   });
 
@@ -63,7 +83,7 @@ function update(source, svg) {
     .enter()
     .insert("path", "g")
     .attr("class", "link")
-    .attr("d", createDiagonal);
+    .attr("d", this.createDiagonal);
 
   const linkUpdate = linkEnter
     .merge(link)
@@ -71,7 +91,7 @@ function update(source, svg) {
     .attr("stroke", "#ccc")
     .attr("stroke-width", "2px");
 
-  linkUpdate.transition().duration(duration).attr("d", createDiagonal);
+  linkUpdate.transition().duration(duration).attr("d", this.createDiagonal);
 
   link
     .exit()
@@ -81,40 +101,25 @@ function update(source, svg) {
       return "translate(" + source.y + "," + source.x + ")";
     })
     .remove();
-}
-
-function createDiagonal(d) {
-  return (
-    "M" +
-    d.source.x +
-    "," +
-    d.source.y +
-    "C" +
-    (d.source.x + d.target.x) / 2 +
-    "," +
-    d.source.y +
-    " " +
-    (d.source.x + d.target.x) / 2 +
-    "," +
-    d.target.y +
-    " " +
-    d.target.x +
-    "," +
-    d.target.y
-  );
-}
-
-function removeNodes() {
-  d3.select("svg").remove();
-}
-
-function clickNodes(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
   }
-  update(d);
+  createDiagonal(d){
+    return (
+      "M" +
+      d.source.x +
+      "," +
+      d.source.y +
+      "C" +
+      (d.source.x + d.target.x) / 2 +
+      "," +
+      d.source.y +
+      " " +
+      (d.source.x + d.target.x) / 2 +
+      "," +
+      d.target.y +
+      " " +
+      d.target.x +
+      "," +
+      d.target.y
+    );
+  }
 }
