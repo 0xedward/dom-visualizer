@@ -1,24 +1,6 @@
 /* eslint-disable require-jsdoc */
 "use strict";
 
-function get(name) {
-  if (
-    (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
-      window.location.search
-    ))
-  )
-    return decodeURIComponent(name[1]);
-}
-
-function getUserParameter() {
-  if (window.location.search !== "") {
-    const userParameter = get(window.location.search);
-    document.addEventListener("DOMContentLoaded", () => {
-      generateDOMTree(userParameter);
-    });
-  }
-}
-
 // TODO consider if using d3.select("svg").size() == 0 instead is a good idea
 let isTreeOnDOM = false;
 
