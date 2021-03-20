@@ -26,6 +26,8 @@ function generateDOMTree(userInputString) {
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData[0];
+    // TODO performance: cache the previous input string to check 
+    // if the current string is the same before traversing the DOM Tree
     if (initialized === false) {
       createAndAppendDOMTree(DOMTreeRootNode);
       initialized = true;
@@ -38,7 +40,7 @@ function generateDOMTree(userInputString) {
     throw new Error("DOMParser failed to parse user input string");
   }
 }
-// eslint-disable-next-line no-unused-vars
+
 function parseHTML(userInputString) {
   if (userInputString !== "") {
     // TODO will userInputString ever be null?
