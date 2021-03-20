@@ -1,6 +1,5 @@
-// // eslint-disable-next-line require-jsdoc
+// // // eslint-disable-next-line require-jsdoc
 
-//Refactor into class
 
 class DOMTree {
   constructor(data){
@@ -9,36 +8,39 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root){
-    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
-    const width = 960 - margin.right - margin.left;
-    const height = 500 - margin.top - margin.bottom;
+    this.margin = { top: 100, right: 200, bottom: 30, left: 100 };
+    this.width = 960 - this.margin.right - this.margin.left;
+    this.height = 500 - this.margin.top - this.margin.bottom;
+    this.duration = 750;
     this.plot = d3
     .select("div#output-container")
     .append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", this.width + this.margin.right + this.margin.left)
+    .attr("height", this.height + this.margin.top + this.margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
     this.update(root);
   }
 
   update(source) {
-    const duration = 750;
-    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
-  const width = 960 - margin.right - margin.left;
-  const height = 500 - margin.top - margin.bottom;
   let i = 0;
-  const tree = d3.tree().size([height, width]);
+  const tree = d3.tree().size([this.height, this.width]);
   const treeRoot = d3.hierarchy(source);
-  tree(treeRoot);
+  treeRoot.x0 = 0;
+  treeRoot.y0 = width / 2;
+  // const treeNodes =tree(treeRoot);
+  tree(treeRoot)
   const nodes = treeRoot.descendants();
   nodes.forEach(function (d) {
     d.y = d.depth * 100;
   });
   const links = treeRoot.links();
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
-    return d.id || (d.id = i++);
+    return d.id || (d.id = ++i);
   });
+
+  //Nodes Section
   const nodeEnter = node
     .enter()
     .append("g")
@@ -79,11 +81,20 @@ class DOMTree {
     return d.target.id;
   });
 
+  const diagonal = function (s, d) {
+    let path = `M ${s.y} ${s.x}
+            C ${(s.y + d.y) / 2} ${s.x},
+              ${(s.y + d.y) / 2} ${d.x},
+              ${d.y} ${d.x}`
+
+    return path
+  }
+
   const linkEnter = link
     .enter()
     .insert("path", "g")
     .attr("class", "link")
-    .attr("d", this.createDiagonal);
+    .attr("d", diagonal);
 
   const linkUpdate = linkEnter
     .merge(link)
@@ -91,35 +102,28 @@ class DOMTree {
     .attr("stroke", "#ccc")
     .attr("stroke-width", "2px");
 
-  linkUpdate.transition().duration(duration).attr("d", this.createDiagonal);
+    linkUpdate.transition()
+    .duration(this.duration)
+    .attr('d', function(d){ return diagonal(d, d.parent) });
 
-  link
-    .exit()
-    .transition()
+    const linkExit = link.exit().transition()
     .duration(duration)
-    .attr("transform", function (d) {
-      return "translate(" + source.y + "," + source.x + ")";
+    .attr('d', function(d) {
+      var o = {x: source.x, y: source.y}
+      return diagonal(o, o)
     })
     .remove();
+
+    nodes.forEach(function(d){
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
   }
-  createDiagonal(d){
-    return (
-      "M" +
-      d.source.x +
-      "," +
-      d.source.y +
-      "C" +
-      (d.source.x + d.target.x) / 2 +
-      "," +
-      d.source.y +
-      " " +
-      (d.source.x + d.target.x) / 2 +
-      "," +
-      d.target.y +
-      " " +
-      d.target.x +
-      "," +
-      d.target.y
-    );
+  collapse(d) {
+    if(d.children) {
+      d._children = d.children;
+      d._children.forEach(this.collapse)
+      d.children = null;
+    }
   }
 }
