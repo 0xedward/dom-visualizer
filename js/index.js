@@ -20,6 +20,7 @@ function getUserParameter() {
 }
 
 let initialized = false;
+
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
@@ -51,7 +52,10 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{ name: "HTML", children: [] }];
+  const resultArray = [{
+    name: "HTML",
+    children: []
+  }];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
