@@ -19,6 +19,7 @@ function getUserParameter() {
   }
 }
 
+// TODO consider if using d3.select("svg").size() == 0 instead is a good idea
 let isTreeOnDOM = false;
 
 function generateDOMTree(userInputString) {
