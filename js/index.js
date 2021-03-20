@@ -24,7 +24,8 @@ function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
-    const DOMTreeRootNode = d3TreeData[0];
+    // const DOMTreeRootNode = d3TreeData[0];
+    const DOMTreeRootNode = d3TreeData;
     let DOM;
     if (initialized === false) {
       DOM = new DOMTree(DOMTreeRootNode);

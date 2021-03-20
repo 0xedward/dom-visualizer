@@ -8,34 +8,42 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root){
-    this.margin = { top: 100, right: 200, bottom: 30, left: 100 };
-    this.width = 960 - this.margin.right - this.margin.left;
-    this.height = 500 - this.margin.top - this.margin.bottom;
-    this.duration = 750;
+    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
+    const width = 960 - margin.right - margin.left;
+    const height = 500 - margin.top - margin.bottom;
+    this.duration = 500;
     this.plot = d3
     .select("div#output-container")
     .append("svg")
-    .attr("width", this.width + this.margin.right + this.margin.left)
-    .attr("height", this.height + this.margin.top + this.margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    this.update(root);
+    this.tree = d3.tree().size([height, width]);
+    this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
+    this.treeRoot.x0 = height / 2
+    this.treeRoot.y0 = 0
+    this.treeRoot.children.forEach(function collapse(d){
+      if(d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse)
+        d.children = null;
+      }
+    })
+
+    this.update(this.treeRoot);
   }
 
   update(source) {
   let i = 0;
-  const tree = d3.tree().size([this.height, this.width]);
-  const treeRoot = d3.hierarchy(source);
-  treeRoot.x0 = 0;
-  treeRoot.y0 = width / 2;
-  // const treeNodes =tree(treeRoot);
-  tree(treeRoot)
-  const nodes = treeRoot.descendants();
+  const treeData = this.tree(this.treeRoot)
+  const nodes = treeData.descendants();
+  const links = treeData.descendants().slice(1);
   nodes.forEach(function (d) {
     d.y = d.depth * 100;
   });
-  const links = treeRoot.links();
+  // const links = treeData.links();
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = ++i);
   });
@@ -47,7 +55,7 @@ class DOMTree {
     .attr("class", "node")
     .attr("transform", function (d) {
       return "translate(" + d.x + "," + d.y + ")";
-    }).on("click", (d) => {
+    }).on("click", (e, d) => {
       if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -65,36 +73,53 @@ class DOMTree {
         return d._children ? "lightsteelblue" : "#fff";
     });
 
-  nodeEnter
-    .append("text")
-    .attr("y", function (d) {
-      return d.children || d._children ? -18 : 18;
-    })
+    nodeEnter.append('text')
     .attr("dy", ".35em")
-    .attr("text-anchor", "middle")
-    .text(function (d) {
-      return d.data.name;
+    .attr("x", function(d) {
+        return d.children || d._children ? -13 : 13;
     })
-    .style("fill", "black");
+    .attr("text-anchor", function(d) {
+        return d.children || d._children ? "end" : "start";
+    })
+    .text(function(d) { return d.data.name; });
 
-  const link = this.plot.selectAll("path.link").data(links, function (d) {
-    return d.target.id;
-  });
+    let nodeUpdate = nodeEnter.merge(node);
 
-  const diagonal = function (s, d) {
-    let path = `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`
+    nodeUpdate.transition()
+    .duration(this.duration)
+    .attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+     });
 
-    return path
-  }
+    nodeUpdate.select('circle.node')
+    .attr('r', 10)
+    .style("fill", function(d) {
+        return d._children ? "lightsteelblue" : "#fff";
+    })
+    .attr('cursor', 'pointer');
 
-  const linkEnter = link
-    .enter()
-    .insert("path", "g")
-    .attr("class", "link")
-    .attr("d", diagonal);
+    let nodeExit = node.exit().transition()
+      .duration(this.duration)
+      .attr("transform", function(d) {
+          return "translate(" + source.y + "," + source.x + ")";
+      })
+      .remove();
+
+    nodeExit.select('circle')
+    .attr('r', 1e-6);
+
+    nodeExit.select('text')
+    .style('fill-opacity', 1e-6);
+
+    let link = this.plot.selectAll('path.link')
+      .data(links, function(d) { return d.id; });
+
+  const linkEnter = link.enter().insert('path', "g")
+      .attr("class", "link")
+      .attr('d', function(d){
+        const o = {x: source.x0, y: source.y0}
+        return diagonal(o, o)
+      });
 
   const linkUpdate = linkEnter
     .merge(link)
@@ -107,9 +132,9 @@ class DOMTree {
     .attr('d', function(d){ return diagonal(d, d.parent) });
 
     const linkExit = link.exit().transition()
-    .duration(duration)
+    .duration(this.duration)
     .attr('d', function(d) {
-      var o = {x: source.x, y: source.y}
+      const o = {x: source.x, y: source.y}
       return diagonal(o, o)
     })
     .remove();
@@ -118,12 +143,13 @@ class DOMTree {
       d.x0 = d.x;
       d.y0 = d.y;
     });
-  }
-  collapse(d) {
-    if(d.children) {
-      d._children = d.children;
-      d._children.forEach(this.collapse)
-      d.children = null;
+
+    function diagonal(s, d) {
+      let path = `M ${s.x} ${s.y}
+        C ${(s.x + d.x) / 2} ${s.y},
+          ${(s.x + d.x) / 2} ${d.y},
+          ${d.x} ${d.y}`;
+      return path;
     }
   }
 }
