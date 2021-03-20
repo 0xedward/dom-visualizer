@@ -19,7 +19,7 @@ function getUserParameter() {
   }
 }
 
-let initialized = false;
+let isTreeOnDOM = false;
 
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
@@ -28,9 +28,9 @@ function generateDOMTree(userInputString) {
     const DOMTreeRootNode = d3TreeData[0];
     // TODO performance: cache the previous input string to check 
     // if the current string is the same before traversing the DOM Tree
-    if (initialized === false) {
+    if (isTreeOnDOM === false) {
       createAndAppendDOMTree(DOMTreeRootNode);
-      initialized = true;
+      isTreeOnDOM = true;
     } else {
       removeNodes();
       createAndAppendDOMTree(DOMTreeRootNode);
