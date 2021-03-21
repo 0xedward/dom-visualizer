@@ -1,5 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-"use strict";
+'use strict';
 
 // TODO consider if using d3.select("svg").size() == 0 instead is a good idea
 let isTreeOnDOM = false;
@@ -9,7 +10,7 @@ function generateDOMTree(userInputString) {
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData[0];
-    // TODO performance: cache the previous input string to check 
+    // TODO performance: cache the previous input string to check
     // if the current string is the same before traversing the DOM Tree
     if (isTreeOnDOM === false) {
       createAndAppendDOMTree(DOMTreeRootNode);
@@ -20,16 +21,16 @@ function generateDOMTree(userInputString) {
     }
   } else {
     // TODO remove this exception when we add try catch block to parseHTML
-    throw new Error("DOMParser failed to parse user input string");
+    throw new Error('DOMParser failed to parse user input string');
   }
 }
 
 function parseHTML(userInputString) {
-  if (userInputString !== "") {
+  if (userInputString !== '') {
     // TODO will userInputString ever be null?
     const parser = new DOMParser();
     // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
-    const htmlDocument = parser.parseFromString(userInputString, "text/html");
+    const htmlDocument = parser.parseFromString(userInputString, 'text/html');
     return htmlDocument.documentElement;
   }
   return null;
@@ -38,8 +39,8 @@ function parseHTML(userInputString) {
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
   const resultArray = [{
-    name: "HTML",
-    children: []
+    name: 'HTML',
+    children: [],
   }];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
@@ -56,7 +57,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     outputArray !== null
   ) {
     const isLeaf = node.children.length === 0;
-    const isNotHTMLNode = node.parentNode.nodeName !== "#document";
+    const isNotHTMLNode = node.parentNode.nodeName !== '#document';
     const currentNodeElementName = node.tagName;
     const currentNodeParentElementName = node.parentNode.tagName;
     if (isNotHTMLNode) {
@@ -86,13 +87,13 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
           }
           if (currentNodeParentIndex == -1) {
             throw new Error(
-              "Algorithm failed to traverse in level order: Unable to find parent node of current node."
+                'Algorithm failed to traverse in level order: Unable to find parent node of current node.'
             );
           }
           levelOrderTraversalHelper(
-            node.children[i],
-            childrenArr[currentNodeParentIndex].children,
-            outputArray
+              node.children[i],
+              childrenArr[currentNodeParentIndex].children,
+              outputArray
           );
         } else {
           // Currently on HTML node, we need to make a different call since the reference of childrenArr.children doesn't exist
@@ -102,16 +103,18 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     }
   } else {
     throw new Error(
-      "Root node is undefined or reference to array to store the result does not exist."
+        'Root node is undefined or reference to array to store the result does not exist.'
     );
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function liveUpdate() {
   const userInputString = document.getElementById('html-input-box').value;
   const liveUpdateCheckBox = document.getElementById('live-update-checkbox');
-  // TODO remove the check for userInputString !== "" when we wrap DOMParser api call in try-catch block
-  if (liveUpdateCheckBox.checked && userInputString !== "") {
+  // TODO remove the check for userInputString !== "" when we wrap
+  // DOMParser api call in try-catch block
+  if (liveUpdateCheckBox.checked && userInputString !== '') {
     generateDOMTree(userInputString);
   }
 }
