@@ -118,3 +118,16 @@ function liveUpdate() {
     generateDOMTree(userInputString);
   }
 }
+
+// eslint-disable-next-line no-unused-vars
+function renderGETParameters() {
+  const queryString = window.location.search;
+  if (queryString !== '') {
+    // TODO find another method that supports IE - https://caniuse.com/?search=URLSearchParams
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('html')) {
+      console.log(params.get('html'));
+      generateDOMTree(params.get('html'));
+    }
+  }
+}
