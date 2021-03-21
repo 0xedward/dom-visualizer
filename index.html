@@ -5,6 +5,37 @@
   <meta charset="utf-8">
   <title>DOM Visualizer</title>
   <style>
+    body {
+      font: 13px/13px Arial;
+      background-color: #f1f1f1;
+      margin: 20px;
+    }
+
+    rect {
+      fill: #ddd;
+    }
+
+    .remove-icon {
+      fill: #eee;
+    }
+
+    .remove-icon-group {
+      cursor: pointer;
+    }
+
+    .remove-icon-group:hover .remove-icon {
+      fill: #fff;
+    }
+
+    .line {
+      position: relative;
+      z-index: 0;
+    }
+
+    .node {
+      cursor: pointer;
+    }
+
     .node circle {
       fill: #fff;
       stroke: steelblue;
