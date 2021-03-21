@@ -126,7 +126,6 @@ function renderGETParameters() {
     // TODO find another method that supports IE - https://caniuse.com/?search=URLSearchParams
     const params = new URLSearchParams(window.location.search);
     if (params.has('html')) {
-      console.log(params.get('html'));
       generateDOMTree(params.get('html'));
     }
   }
