@@ -8,7 +8,7 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root){
-    const margin = { top: 100, right: 200, bottom: 30, left: 100 };
+    const margin = { top: 50, right: 200, bottom: 30, left: 100 };
     const width = 960 - margin.right - margin.left;
     const height = 500 - margin.top - margin.bottom;
     this.duration = 500;
@@ -22,7 +22,7 @@ class DOMTree {
 
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = height / 2
+    this.treeRoot.x0 = 2
     this.treeRoot.y0 = 0
     this.treeRoot.children.forEach(function collapse(d){
       if(d.children) {
@@ -37,13 +37,14 @@ class DOMTree {
 
   update(source) {
   let i = 0;
+  const rectH=30
+  const rectW=60
   const treeData = this.tree(this.treeRoot)
   const nodes = treeData.descendants();
   const links = treeData.descendants().slice(1);
   nodes.forEach(function (d) {
     d.y = d.depth * 100;
   });
-  // const links = treeData.links();
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = ++i);
   });
@@ -66,22 +67,30 @@ class DOMTree {
       this.update(d);
     })
 
-    nodeEnter.append('circle')
-    .attr('class', 'node')
-    .attr('r', 1e-6)
-    .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
-    });
 
+    nodeEnter.append('rect')
+      .attr('class', 'node')
+      .attr("width", rectW)
+      .attr("height", rectH)
+      .attr("x", 0)
+      .attr("y", (rectH/2)*-1)
+      .attr("rx","5")
+      .style("fill", function(d) {
+          return d.data.fill;
+      });
     nodeEnter.append('text')
-    .attr("dy", ".35em")
+    .attr("dy", "-.35em")
     .attr("x", function(d) {
-        return d.children || d._children ? -13 : 13;
+      return 13;
     })
     .attr("text-anchor", function(d) {
-        return d.children || d._children ? "end" : "start";
+      return "start";
     })
-    .text(function(d) { return d.data.name; });
+    .text(function(d) { return d.data.name; })
+    .append("tspan")
+    .attr("dy", "1.75em").attr("x", function(d) {
+      return 13;
+    })
 
     let nodeUpdate = nodeEnter.merge(node);
 
@@ -91,12 +100,19 @@ class DOMTree {
         return "translate(" + d.x + "," + d.y + ")";
      });
 
-    nodeUpdate.select('circle.node')
-    .attr('r', 10)
-    .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
+
+    nodeUpdate.select('rect')
+    .attr('rx', 6)
+    .attr('ry', 6)
+    .attr('y', -(rectH / 2))
+    .attr('width', function(d){
+      var textElement = d3.select(this.parentNode).select("text").node();
+      var bbox = textElement.getBBox();
+      var width = bbox.width;
+      return width*2;
     })
-    .attr('cursor', 'pointer');
+    .attr('height', rectH)
+    .style('fill', function(d) { return d._children ? 'lightsteelblue' : '#fff'; });
 
     let nodeExit = node.exit().transition()
       .duration(this.duration)
@@ -105,11 +121,13 @@ class DOMTree {
       })
       .remove();
 
-    nodeExit.select('circle')
+    nodeExit.select('rect')
     .attr('r', 1e-6);
 
     nodeExit.select('text')
     .style('fill-opacity', 1e-6);
+
+    //Links Section
 
     let link = this.plot.selectAll('path.link')
       .data(links, function(d) { return d.id; });
@@ -131,7 +149,7 @@ class DOMTree {
     .duration(this.duration)
     .attr('d', function(d){ return diagonal(d, d.parent) });
 
-    const linkExit = link.exit().transition()
+    link.exit().transition()
     .duration(this.duration)
     .attr('d', function(d) {
       const o = {x: source.x, y: source.y}
