@@ -106,3 +106,12 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     );
   }
 }
+
+function liveUpdate() {
+  const userInputString = document.getElementById('html-input-box').value;
+  const liveUpdateCheckBox = document.getElementById('live-update-checkbox');
+  // TODO remove the check for userInputString !== "" when we wrap DOMParser api call in try-catch block
+  if (liveUpdateCheckBox.checked && userInputString !== "") {
+    generateDOMTree(userInputString);
+  }
+}
