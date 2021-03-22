@@ -8,10 +8,10 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root){
-    const margin = { top: 50, right: 200, bottom: 30, left: 100 };
+    const margin = { top: 50, right: 90, bottom: 30, left: 100 };
     const width = 960 - margin.right - margin.left;
     const height = 500 - margin.top - margin.bottom;
-    this.duration = 500;
+    this.duration = 750;
     this.plot = d3
     .select("div#output-container")
     .append("svg")
@@ -22,8 +22,8 @@ class DOMTree {
 
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = 2
-    this.treeRoot.y0 = 0
+    this.treeRoot.x0 = 0
+    this.treeRoot.y0 = height/2
     this.treeRoot.children.forEach(function collapse(d){
       if(d.children) {
         d._children = d.children;
@@ -37,13 +37,13 @@ class DOMTree {
 
   update(source) {
   let i = 0;
-  const rectH=30
-  const rectW=60
+  const rectH=25
+  const rectW=30
   const treeData = this.tree(this.treeRoot)
   const nodes = treeData.descendants();
   const links = treeData.descendants().slice(1);
   nodes.forEach(function (d) {
-    d.y = d.depth * 100;
+    d.y = d.depth * 150;
   });
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = ++i);
@@ -72,17 +72,16 @@ class DOMTree {
       .attr('class', 'node')
       .attr("width", rectW)
       .attr("height", rectH)
-      .attr("x", 0)
-      .attr("y", (rectH/2)*-1)
+      // .attr("x", 0)
+      // .attr("y", (rectH/2)*-1)
       .attr("rx","5")
       .style("fill", function(d) {
           return d.data.fill;
       });
     nodeEnter.append('text')
     .attr("dy", "-.35em")
-    .attr("x", function(d) {
-      return 13;
-    })
+    .attr("x", rectW / 2)
+    .attr("y", rectH / 2)
     .attr("text-anchor", function(d) {
       return "start";
     })
@@ -141,9 +140,9 @@ class DOMTree {
 
   const linkUpdate = linkEnter
     .merge(link)
-    .attr("fill", "none")
-    .attr("stroke", "#ccc")
-    .attr("stroke-width", "2px");
+    // .attr("fill", "none")
+    // .attr("stroke", "#ccc")
+    // .attr("stroke-width", "2px");
 
     linkUpdate.transition()
     .duration(this.duration)
