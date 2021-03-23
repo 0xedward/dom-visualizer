@@ -17,8 +17,17 @@ class DOMTree {
     .append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
+    .call(d3.zoom()
+    .scaleExtent([1 / 32, 8])
+    .on("zoom", zoomed))
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    let svg = this.plot;
+
+    function zoomed(event) {
+      svg.attr("transform", event.transform);
+    }
 
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
@@ -105,10 +114,10 @@ class DOMTree {
     .attr('ry', 6)
     .attr('y', -(rectH / 2))
     .attr('width', function(d){
-      var textElement = d3.select(this.parentNode).select("text").node();
-      var bbox = textElement.getBBox();
-      var width = bbox.width;
-      return width*2;
+      const textElement = d3.select(this.parentNode).select("text").node();
+      const bbox = textElement.getBBox();
+      let width = bbox.width;
+      return width*2.5;
     })
     .attr('height', rectH)
     .style('fill', function(d) { return d._children ? 'lightsteelblue' : '#fff'; });
@@ -140,9 +149,6 @@ class DOMTree {
 
   const linkUpdate = linkEnter
     .merge(link)
-    // .attr("fill", "none")
-    // .attr("stroke", "#ccc")
-    // .attr("stroke-width", "2px");
 
     linkUpdate.transition()
     .duration(this.duration)
