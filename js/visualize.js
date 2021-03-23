@@ -8,10 +8,11 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root){
-    const margin = { top: 50, right: 90, bottom: 30, left: 100 };
+    const margin = { top: 50, right: 30, bottom: 0, left: 30 };
     const width = 960 - margin.right - margin.left;
     const height = 500 - margin.top - margin.bottom;
     this.duration = 750;
+
     this.plot = d3
     .select("div#output-container")
     .append("svg")
@@ -31,8 +32,8 @@ class DOMTree {
 
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = -1000
-    this.treeRoot.y0 = height/2
+    this.treeRoot.x0 = height/2;
+    this.treeRoot.y0 = 0
     this.treeRoot.children.forEach(function collapse(d){
       if(d.children) {
         d._children = d.children;
@@ -51,13 +52,14 @@ class DOMTree {
   const treeData = this.tree(this.treeRoot)
   const nodes = treeData.descendants();
   const links = treeData.descendants().slice(1);
-  console.log(links)
   nodes.forEach(function (d) {
-    d.y = d.depth * 150;
+    d.y = d.depth * 100;
   });
+
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
     return d.id || (d.id = ++i);
   });
+
 
   //Nodes Section
   const nodeEnter = node
@@ -65,7 +67,7 @@ class DOMTree {
     .append("g")
     .attr("class", "node")
     .attr("transform", function (d) {
-      return "translate(" + d.x + "," + d.y + ")";
+      return "translate(" + (source.x0) + "," + source.y0 + ")";
     }).on("click", (e, d) => {
       if (d.children) {
         d._children = d.children;
@@ -82,8 +84,6 @@ class DOMTree {
       .attr('class', 'node')
       .attr("width", rectW)
       .attr("height", rectH)
-      // .attr("x", 0)
-      // .attr("y", (rectH/2)*-1)
       .attr("rx","5")
       .style("fill", function(d) {
           return d.data.fill;
@@ -101,7 +101,7 @@ class DOMTree {
       return 13;
     })
 
-    let nodeUpdate = nodeEnter.merge(node);
+    const nodeUpdate = nodeEnter.merge(node);
 
     nodeUpdate.transition()
     .duration(this.duration)
@@ -114,6 +114,8 @@ class DOMTree {
     .attr('rx', 6)
     .attr('ry', 6)
     .attr('y', -(rectH / 2))
+    .attr("stroke", "black")
+        .attr("stroke-width", 1)
     .attr('width', function(d){
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
@@ -141,13 +143,11 @@ class DOMTree {
 
     //Links Section
 
-    let link = this.plot.selectAll('path.link')
-      .data(links, function(d) { return d.id; });
+    const link = this.plot.selectAll('path.link')
+    .data(links, function(d) { return d.id });
 
   const linkEnter = link.enter().insert('path', "g")
       .attr("class", "link")
-      .attr("x", rectW / 2)
-        .attr("y", rectH / 2)
       .attr('d', function(d){
         const o = {x: source.x0, y: source.y0}
         return diagonal(o, o)
