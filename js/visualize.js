@@ -31,7 +31,7 @@ class DOMTree {
 
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = 0
+    this.treeRoot.x0 = -1000
     this.treeRoot.y0 = height/2
     this.treeRoot.children.forEach(function collapse(d){
       if(d.children) {
@@ -51,6 +51,7 @@ class DOMTree {
   const treeData = this.tree(this.treeRoot)
   const nodes = treeData.descendants();
   const links = treeData.descendants().slice(1);
+  console.log(links)
   nodes.forEach(function (d) {
     d.y = d.depth * 150;
   });
@@ -125,12 +126,15 @@ class DOMTree {
     let nodeExit = node.exit().transition()
       .duration(this.duration)
       .attr("transform", function(d) {
-          return "translate(" + source.y + "," + source.x + ")";
+          return "translate(" + source.x + "," + source.y + ")";
       })
       .remove();
 
-    nodeExit.select('rect')
-    .attr('r', 1e-6);
+      nodeExit.select("rect")
+      .attr("width", rectW)
+      .attr("height", rectH)
+  .attr("stroke", "black")
+      .attr("stroke-width", 1);
 
     nodeExit.select('text')
     .style('fill-opacity', 1e-6);
@@ -142,6 +146,8 @@ class DOMTree {
 
   const linkEnter = link.enter().insert('path', "g")
       .attr("class", "link")
+      .attr("x", rectW / 2)
+        .attr("y", rectH / 2)
       .attr('d', function(d){
         const o = {x: source.x0, y: source.y0}
         return diagonal(o, o)
