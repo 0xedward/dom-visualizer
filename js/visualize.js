@@ -4,20 +4,21 @@
 class DOMTree {
   constructor(data){
     this.data = data;
+    this.duration = 750;
     this.createAndAppendDOMTree(data)
   }
 
   createAndAppendDOMTree(root){
     const margin = { top: 50, right: 30, bottom: 0, left: 30 };
-    const width = 960 - margin.right - margin.left;
-    const height = 500 - margin.top - margin.bottom;
-    this.duration = 750;
+    //TODO: use media queries to determine height
+    const screenWidth = screen.availWidth / 2.1;
+    const screenHeight = screen.availHeight * .9;
 
     this.plot = d3
     .select("div#output-container")
     .append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", screenWidth + margin.right + margin.left)
+    .attr("height", screenHeight + margin.top + margin.bottom)
     .call(d3.zoom()
     .scaleExtent([1 / 32, 8])
     .on("zoom", zoomed))
@@ -30,18 +31,11 @@ class DOMTree {
       svg.attr("transform", event.transform);
     }
 
-
-    this.tree = d3.tree().size([height, width]).nodeSize([80, 20]);
+    // this.tree = d3.tree().size([height, width]).nodeSize([80, 20]);
+    this.tree = d3.tree().nodeSize([80, 20]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = 0;
-    this.treeRoot.y0 = height/2
-    // this.treeRoot.children.forEach(function collapse(d){
-    //   if(d.children) {
-    //     d._children = d.children;
-    //     d._children.forEach(collapse)
-    //     d.children = null;
-    //   }
-    // })
+    this.treeRoot.x0 = screenWidth /2;
+    this.treeRoot.y0 = screenHeight * .05;
 
     this.update(this.treeRoot);
   }
@@ -199,6 +193,11 @@ class DOMTree {
       return diagonal(o, o)
     })
     .remove();
+
+    // nodes.forEach(function(d) {
+    //   d.x0 = d.x;
+    //   d.y0 = d.y;
+    // })
 
     nodes.forEach(function(d) {
       if(d.data.name === "META"){
