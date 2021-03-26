@@ -30,28 +30,30 @@ class DOMTree {
       svg.attr("transform", event.transform);
     }
 
+
     this.tree = d3.tree().size([height, width]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
-    this.treeRoot.x0 = height/2;
-    this.treeRoot.y0 = 0
-    this.treeRoot.children.forEach(function collapse(d){
-      if(d.children) {
-        d._children = d.children;
-        d._children.forEach(collapse)
-        d.children = null;
-      }
-    })
+    this.treeRoot.x0 = 0;
+    this.treeRoot.y0 = height/2
+    // this.treeRoot.children.forEach(function collapse(d){
+    //   if(d.children) {
+    //     d._children = d.children;
+    //     d._children.forEach(collapse)
+    //     d.children = null;
+    //   }
+    // })
 
     this.update(this.treeRoot);
   }
 
   update(source) {
   let i = 0;
+  //TODO: Use media queries to adjust rectangle sizing
   const rectH=25
   const rectW=30
-  const treeData = this.tree(this.treeRoot)
-  const nodes = treeData.descendants();
-  const links = treeData.descendants().slice(1);
+  this.treeData = this.tree(this.treeRoot)
+  const nodes = this.treeData.descendants();
+  const links = this.treeData.descendants().slice(1);
   nodes.forEach(function (d) {
     d.y = d.depth * 100;
   });
