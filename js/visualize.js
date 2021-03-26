@@ -31,7 +31,7 @@ class DOMTree {
     }
 
 
-    this.tree = d3.tree().size([height, width]);
+    this.tree = d3.tree().size([height, width]).nodeSize([80, 20]);
     this.treeRoot = d3.hierarchy(root[0], function(d) { return d.children; });
     this.treeRoot.x0 = 0;
     this.treeRoot.y0 = height/2
@@ -121,12 +121,18 @@ class DOMTree {
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
       bbox.x -= leftPadding / 2;
+      if(textElement.innerHTML == "META"){
+        console.log("x:", bbox.x)
+      }
       return bbox.x
     })
     .attr("y", function(d) {
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
       bbox.y -= verticalPadding / 2;
+      if(textElement.innerHTML == "META"){
+        console.log("y:", bbox.y)
+      }
       return bbox.y
     })
     .attr("stroke", "black")
@@ -134,18 +140,19 @@ class DOMTree {
     .attr('width', function(d){
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
-      // console.log("bbox ->", bbox)
-      // console.log("BEFORE ->", bbox.width, "AFTER ->", bbox.width + 1)
       bbox.width += leftPadding;
-      // console.log(bbox.x)
-      // bbox.x -= 500;
-      // console.log("AFTER", bbox.x)
+      if(textElement.innerHTML == "META"){
+        console.log("w:", bbox.width)
+      }
       return bbox.width;
     })
     .attr('height', function(d) {
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
       bbox.height += verticalPadding
+      if(textElement.innerHTML == "META"){
+        console.log("height:", bbox.height)
+      }
       return bbox.height
     })
     .style('fill', function(d) { return d._children ? 'lightsteelblue' : '#fff'; });
@@ -193,11 +200,11 @@ class DOMTree {
     })
     .remove();
 
-    nodes.forEach(function(d){
-      d.x0 = d.x;
-      d.y0 = d.y;
-    });
-
+    nodes.forEach(function(d) {
+      if(d.data.name === "META"){
+        console.log(d)
+      }
+    })
     function diagonal(s, d) {
       let path = `M ${s.x} ${s.y}
         C ${(s.x + d.x) / 2} ${s.y},
