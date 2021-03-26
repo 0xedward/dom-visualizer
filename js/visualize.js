@@ -46,16 +46,15 @@ class DOMTree {
     this.update(this.treeRoot);
   }
 
-  update(source) {
+  update(root) {
   let i = 0;
-  //TODO: Use media queries to adjust rectangle sizing
-  const rectH=25
-  const rectW=30
+  //TODO: Change depth for media queries
+  let treeLevelPadding = 100;
   this.treeData = this.tree(this.treeRoot)
   const nodes = this.treeData.descendants();
   const links = this.treeData.descendants().slice(1);
   nodes.forEach(function (d) {
-    d.y = d.depth * 100;
+    d.y = d.depth * treeLevelPadding;
   });
 
   const node = this.plot.selectAll("g.node").data(nodes, function (d) {
@@ -69,68 +68,92 @@ class DOMTree {
     .append("g")
     .attr("class", "node")
     .attr("transform", function (d) {
-      return "translate(" + (source.x0) + "," + source.y0 + ")";
+      return "translate(" + (root.x0) + "," + root.y0 + ")";
     }).on("click", (e, d) => {
       if (d.children) {
         d._children = d.children;
         d.children = null;
       } else {
         d.children = d._children;
-        d._children = null;
       }
       this.update(d);
     })
+
+    //TODO: Use media queries to adjust rectangle sizing
+    const rectH=25
+    const rectW=30
 
 
     nodeEnter.append('rect')
       .attr('class', 'node')
       .attr("width", rectW)
       .attr("height", rectH)
-      .attr("rx","5")
+      .attr("rx","0")
       .style("fill", function(d) {
           return d.data.fill;
       });
     nodeEnter.append('text')
-    .attr("dy", "-.35em")
-    .attr("x", rectW / 2)
+    .text(function(d) { return d.data.name; })
+    .attr("x", function(d) {
+      const textElement = d3.select(this.parentNode).select("text").node();
+      const bbox = textElement.getBBox();
+      return (rectW / 2) - (bbox.width / 2)
+    })
     .attr("y", rectH / 2)
     .attr("text-anchor", function(d) {
-      return "start";
+      return "middle";
     })
-    .text(function(d) { return d.data.name; })
-    .append("tspan")
-    .attr("dy", "1.75em").attr("x", function(d) {
-      return 13;
-    })
-
     const nodeUpdate = nodeEnter.merge(node);
 
+    //TODO: Figure out how to get rid of starting animation
     nodeUpdate.transition()
     .duration(this.duration)
     .attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
      });
 
-
+    let leftPadding = 25;
+    let verticalPadding = 10;
     nodeUpdate.select('rect')
-    .attr('rx', 6)
-    .attr('ry', 6)
-    .attr('y', -(rectH / 2))
+    .attr('rx', 3)
+    .attr('ry', 3)
+    .attr("x", function(d) {
+      const textElement = d3.select(this.parentNode).select("text").node();
+      const bbox = textElement.getBBox();
+      bbox.x -= leftPadding / 2;
+      return bbox.x
+    })
+    .attr("y", function(d) {
+      const textElement = d3.select(this.parentNode).select("text").node();
+      const bbox = textElement.getBBox();
+      bbox.y -= verticalPadding / 2;
+      return bbox.y
+    })
     .attr("stroke", "black")
         .attr("stroke-width", 1)
     .attr('width', function(d){
       const textElement = d3.select(this.parentNode).select("text").node();
       const bbox = textElement.getBBox();
-      let width = bbox.width;
-      return width*2.5;
+      // console.log("bbox ->", bbox)
+      // console.log("BEFORE ->", bbox.width, "AFTER ->", bbox.width + 1)
+      bbox.width += leftPadding;
+      // console.log(bbox.x)
+      // bbox.x -= 500;
+      // console.log("AFTER", bbox.x)
+      return bbox.width;
     })
-    .attr('height', rectH)
+    .attr('height', function(d) {
+      const textElement = d3.select(this.parentNode).select("text").node();
+      const bbox = textElement.getBBox();
+      bbox.height += verticalPadding
+      return bbox.height
+    })
     .style('fill', function(d) { return d._children ? 'lightsteelblue' : '#fff'; });
 
     let nodeExit = node.exit().transition()
       .duration(this.duration)
       .attr("transform", function(d) {
-          return "translate(" + source.x + "," + source.y + ")";
+          return "translate(" + root.x + "," + root.y + ")";
       })
       .remove();
 
@@ -151,7 +174,7 @@ class DOMTree {
   const linkEnter = link.enter().insert('path', "g")
       .attr("class", "link")
       .attr('d', function(d){
-        const o = {x: source.x0, y: source.y0}
+        const o = {x: root.x0, y: root.y0}
         return diagonal(o, o)
       });
 
@@ -165,7 +188,7 @@ class DOMTree {
     link.exit().transition()
     .duration(this.duration)
     .attr('d', function(d) {
-      const o = {x: source.x, y: source.y}
+      const o = {x: root.x, y: root.y}
       return diagonal(o, o)
     })
     .remove();
