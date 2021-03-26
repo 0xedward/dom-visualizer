@@ -6,6 +6,7 @@ class DOMTree {
     this.svgWidth = screen.availWidth / 2.1;
     this.svgHeight = screen.availHeight * .8; ;
     this.duration = 500;
+    // TODO remove function call that doesn't set something to a variable in constructor
     this.createAndAppendDOMTree(data);
   }
 
@@ -27,10 +28,11 @@ class DOMTree {
     const svg = this.plot;
 
     function zoomed(event) {
+      // TODO: Bug - initial drag after tree is appended to DOM results in root node snapping to translate(-1,0)
       svg.attr('transform', event.transform);
     }
 
-    // this.tree = d3.tree().size([height, width]).nodeSize([80, 20]);
+    // TODO: Bug - some node are still off-centered
     this.tree = d3.tree().nodeSize([80, 20]);
     this.treeRoot = d3.hierarchy(root[0], function(d) {
       return d.children;
@@ -123,18 +125,12 @@ class DOMTree {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.x -= horizontalPadding / 2;
-          if (textElement.innerHTML == 'META') {
-            console.log('x:', bbox.x);
-          }
           return bbox.x;
         })
         .attr('y', function(d) {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.y -= verticalPadding / 2;
-          if (textElement.innerHTML == 'META') {
-            console.log('y:', bbox.y);
-          }
           return bbox.y;
         })
         .attr('stroke', 'black')
@@ -143,18 +139,12 @@ class DOMTree {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.width += horizontalPadding;
-          if (textElement.innerHTML == 'META') {
-            console.log('w:', bbox.width);
-          }
           return bbox.width;
         })
         .attr('height', function(d) {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.height += verticalPadding;
-          if (textElement.innerHTML == 'META') {
-            console.log('height:', bbox.height);
-          }
           return bbox.height;
         })
         .style('fill', function(d) {
@@ -179,6 +169,7 @@ class DOMTree {
 
     // Links Section
 
+    // TODO: Bug - when expanding a collapsed node, the edges appear before the nodes are transitioned into position
     const link = this.plot.selectAll('path.link')
         .data(links, function(d) {
           return d.id;
@@ -208,12 +199,6 @@ class DOMTree {
         })
         .remove();
 
-
-    nodes.forEach(function(d) {
-      if (d.data.name === 'META') {
-        console.log(d);
-      }
-    });
     function diagonal(s, d) {
       const path = `M ${s.x} ${s.y}
         C ${(s.x + d.x) / 2} ${s.y},
