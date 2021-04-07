@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 // eslint-disable-next-line require-jsdoc
 
 class DOMTree {
@@ -13,25 +14,20 @@ class DOMTree {
   createAndAppendDOMTree(root) {
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
+    const zoomExtent = d3.zoom().scaleExtent([1/32, 8]).on('zoom', zoomed);
+    const transScale = 1;
 
-    this.plot = d3
-        .select('div#output-container')
-        .append('svg')
-        .attr('width', this.svgWidth)
-        .attr('height', this.svgHeight)
-        .call(d3.zoom()
-            .scaleExtent([1 / 32, 8])
-            .on('zoom', zoomed))
-        .append('g')
-        .attr('transform', 'translate(' + initialX + ',' + initialY + ')');
 
-    const svg = this.plot;
+    const svg = d3.select('div#output-container').append('svg')
+        .attr('width', this.svgWidth).attr('height', this.svgHeight).call(zoomExtent)
+        .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY).scale(transScale)).append('g').attr('transform', 'translate(' + initialX + ',' + initialY + ')')
+
+    this.plot = svg;
 
     function zoomed(event) {
       // TODO: Bug - initial drag after tree is appended to DOM results in root node snapping to translate(-1,0)
-      svg.attr('transform', event.transform);
+        svg.attr('transform', event.transform);
     }
-
     // TODO: Bug - some node are still off-centered
     this.tree = d3.tree().nodeSize([80, 20]);
     this.treeRoot = d3.hierarchy(root[0], function(d) {
