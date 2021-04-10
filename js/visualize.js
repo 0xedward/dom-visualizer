@@ -9,24 +9,24 @@ class DOMTree {
     this.duration = 500;
     // TODO remove function call that doesn't set something to a variable in constructor
     this.createAndAppendDOMTree(data);
+    this.maxWidth = 0;
   }
 
   createAndAppendDOMTree(root) {
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
     const zoomExtent = d3.zoom().scaleExtent([1/32, 8]).on('zoom', zoomed);
-    const transScale = 1;
+    this.transScale = 1;
 
 
     const svg = d3.select('div#output-container').append('svg')
         .attr('width', this.svgWidth).attr('height', this.svgHeight).call(zoomExtent)
-        .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY).scale(transScale)).append('g').attr('transform', 'translate(' + initialX + ',' + initialY + ')')
+        .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY).scale(this.transScale)).append('g').attr('transform', 'translate(' + initialX + ',' + initialY + ')')
 
     this.plot = svg;
 
     function zoomed(event) {
-      // TODO: Bug - initial drag after tree is appended to DOM results in root node snapping to translate(-1,0)
-        svg.attr('transform', event.transform);
+      svg.attr('transform', event.transform);
     }
     // TODO: Bug - some node are still off-centered
     this.tree = d3.tree().nodeSize([80, 20]);
@@ -111,6 +111,7 @@ class DOMTree {
         });
 
     // TODO: Size rectangle padding by some factor of svgHeight and svgWidth
+    const nodeWidths = {};
 
     const horizontalPadding = 25;
     const verticalPadding = 10;
@@ -121,6 +122,7 @@ class DOMTree {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.x -= horizontalPadding / 2;
+
           return bbox.x;
         })
         .attr('y', function(d) {
@@ -135,6 +137,12 @@ class DOMTree {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.width += horizontalPadding;
+          if (nodeWidths[d.depth] === undefined) {
+            nodeWidths[d.depth] = bbox.width;
+          }
+          else {
+            nodeWidths[d.depth] += bbox.width;
+          }
           return bbox.width;
         })
         .attr('height', function(d) {
@@ -146,6 +154,15 @@ class DOMTree {
         .style('fill', function(d) {
           return d._children ? 'lightsteelblue' : '#fff';
         });
+
+    // for (const width in nodeWidths) {
+    //   if (nodeWidths[width] > this.maxWidth) {
+    //     this.maxWidth = nodeWidths[width];
+    //   }
+    // }
+
+    // console.log(this.maxWidth);
+
 
     const nodeExit = node.exit().transition()
         .duration(this.duration)
