@@ -1,25 +1,41 @@
 /* eslint-disable require-jsdoc */
 "use strict";
 
-function get(name) {
-  if (
-    (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
-      window.location.search
-    ))
-  )
-    return decodeURIComponent(name[1]);
-}
+const docType = "HTML";
+const docMetadata = ["HEAD", "TITLE", "BASE", "LINK", "META", "STYLE"];
+const sections = ["BODY", "ARTICLE", "SECTION", "NAV", "ASIDE", "H1", "H2", "H3", "H4", "H5", "H6", "HGROUP", "HEADER", "FOOTER", "ADDRESS"]
+const grouping = ["P", "HR", "PRE", "BLOCKQUOTE", "OL", "UL", "MENU", "LI", "DL", "DT", "DD", "FIGURE", "FIGCAPTION", "MAIN", "DIV"]
+const textSemantics = ["A", "EM", "STRONG", "SMALL", "S", "CITE", "Q", "DFN", "ABBR", "RUBY", "RT", "RP", "DATA", "TIME", "CODE", "VAR", "SAMP", "KBD", "SUB", "SUP", "I",
+"B", "U", "MARK", "BDI", "BDO", "SPAN", "BR", "WBR"]
+const links = ["AREA", "ALTERNATE", "AUTHOR", "BOOKMARK", "CANONICAL", "DNS-PREFETCH", "EXTERNAL", "HELP", "ICON", "LICENSE", "MANIFEST", "MODULEPRELOAD", "NOFOLLOW", "NOREFERRER",
+"OPENER", "PINGBACK", "PRECONNECT", "PREFETCH", "PRELOAD", "PRERENDER", "SEARCH", "STYLESHEET", "TAG", "NEXT", "PREV"];
+const edits = ["INS", "DEL"];
+const embeddedContent = ["PICTURE", "SOURCE", "IMG", "SOURCE", "LINK", "IFRAME", "EMBED", "OBJECT", "PARAM", "VIDEO", "AUDIO", "TRACK", "MAP", "AREA"];
+const tabulardata = ["TABLE", "CAPTION", "COLGROUP", "COL", "TBODY", "THEAD", "TFOOT", "TR", "TD", "TH"];
+const forms = ["FORM", "LABEL", "INPUT", "BUTTON", "SELECT", "DATALIST"]
 
-function getUserParameter() {
-  if (window.location.search !== "") {
-    const userParameter = get(window.location.search);
-    document.addEventListener("DOMContentLoaded", () => {
-      generateDOMTree(userParameter);
-    });
-  }
-}
+//TODO: User can navigate to page/graph by link
+
+// function get(name) {
+//   if (
+//     (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
+//       window.location.search
+//     ))
+//   )
+//     return decodeURIComponent(name[1]);
+// }
+
+// function getUserParameter() {
+//   if (window.location.search !== "") {
+//     const userParameter = get(window.location.search);
+//     document.addEventListener("DOMContentLoaded", () => {
+//       generateDOMTree(userParameter);
+//     });
+//   }
+// }
 
 let initialized = false;
+
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
@@ -31,21 +47,21 @@ function generateDOMTree(userInputString) {
       DOM = new DOMTree(DOMTreeRootNode);
       initialized = true;
     } else {
-      d3.select("svg").remove();
-      DOM = new DOMTree(DOMTreeRootNode)
+      d3.select('svg').remove();
+      DOM = new DOMTree(DOMTreeRootNode);
     }
   } else {
     // TODO remove this exception when we add try catch block to parseHTML
-    throw new Error("DOMParser failed to parse user input string");
+    throw new Error('DOMParser failed to parse user input string');
   }
 }
 // eslint-disable-next-line no-unused-vars
 function parseHTML(userInputString) {
-  if (userInputString !== "") {
+  if (userInputString !== '') {
     // TODO will userInputString ever be null?
     const parser = new DOMParser();
     // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
-    const htmlDocument = parser.parseFromString(userInputString, "text/html");
+    const htmlDocument = parser.parseFromString(userInputString, 'text/html');
     return htmlDocument.documentElement;
   }
   return null;
@@ -53,7 +69,7 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{ name: "HTML", children: [] }];
+  const resultArray = [{name: 'HTML', children: []}];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -69,7 +85,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     outputArray !== null
   ) {
     const isLeaf = node.children.length === 0;
-    const isNotHTMLNode = node.parentNode.nodeName !== "#document";
+    const isNotHTMLNode = node.parentNode.nodeName !== '#document';
     const currentNodeElementName = node.tagName;
     const currentNodeParentElementName = node.parentNode.tagName;
     if (isNotHTMLNode) {

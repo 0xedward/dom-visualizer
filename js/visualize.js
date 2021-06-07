@@ -9,7 +9,6 @@ class DOMTree {
     this.duration = 500;
     // TODO remove function call that doesn't set something to a variable in constructor
     this.createAndAppendDOMTree(data);
-    this.maxWidth = 0;
   }
 
   createAndAppendDOMTree(root) {
@@ -85,6 +84,9 @@ class DOMTree {
         .attr('width', rectW)
         .attr('height', rectH)
         .attr('rx', '0')
+        .style('stroke', function(d) {
+          return d.type;
+        })
         .style('fill', function(d) {
           return d.data.fill;
         });
@@ -154,14 +156,16 @@ class DOMTree {
         .style('fill', function(d) {
           return d._children ? 'lightsteelblue' : '#fff';
         });
+        
+    //FIX SIZING 
 
-    // for (const width in nodeWidths) {
-    //   if (nodeWidths[width] > this.maxWidth) {
-    //     this.maxWidth = nodeWidths[width];
-    //   }
-    // }
+    let maxWidth = 0;
 
-    // console.log(this.maxWidth);
+    for (const width in nodeWidths) {
+      if (nodeWidths[width] > maxWidth) {
+        maxWidth = nodeWidths[width];
+      }
+    }
 
 
     const nodeExit = node.exit().transition()
