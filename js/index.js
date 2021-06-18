@@ -56,7 +56,7 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{name: 'HTML', children: [], type: 'doctype'}];
+  const resultArray = [{name: 'HTML', children: [], type: 'doctype', color: '#CBEEF3'}];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -76,13 +76,15 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     const isNotHTMLNode = node.parentNode.nodeName !== '#document';
     const currentNodeElementName = node.tagName;
     const currentNodeParentElementName = node.parentNode.tagName;
+    const {type, color} = determineType(currentNodeElementName);
     if (isNotHTMLNode) {
       childrenArr.push({
         name: currentNodeElementName,
         parent: currentNodeParentElementName,
         children: [],
         obj: node,
-        type: determineType(currentNodeElementName),
+        type: type,
+        color: color,
       });
     } else if (isLeaf) {
       childrenArr.push({
@@ -90,7 +92,8 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
         // TODO do we need this reference?
         parent: currentNodeParentElementName,
         obj: node,
-        type: determineType(currentNodeElementName),
+        type: type,
+        color: color,
       });
     }
     if (!isLeaf) {
@@ -138,38 +141,48 @@ function determineType(node) {
   const forms = new Set(["FORM", "LABEL", "INPUT", "BUTTON", "SELECT", "DATALIST"]);
 
   let type;
-
+  let color;
 
   switch (true) {
     case docMetadata.has(node):
       type = 'docMetadata';
+      color = '#7CA982';
       break;
     case sections.has(node):
       type = 'sections';
+      color = '#E2C2FF';
       break;
     case grouping.has(node):
       type = 'grouping';
+      color = '#A7ADC6';
       break;
     case textSemantics.has(node):
       type = 'textSemantics';
+      color = '#243119';
       break;
     case links.has(node):
       type = 'links';
+      color = '#F4F4F9';
       break;
     case edits.has(node):
       type = 'edits';
+      color = '#F3D9B1';
       break;
     case embeddedContent.has(node):
       type = 'embeddedContent';
+      color = '#311E10';
       break;
     case tabularData.has(node):
       type = 'tabularData';
+      color = '#759AAB';
       break;
     case forms.has(node):
       type = 'forms';
+      color = '#759AAB';
       break;
     default:
       type = 'other';
+      color = '#3066BE';
   }
-  return type;
+  return {'type': type, 'color': color};
 }

@@ -12,7 +12,6 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root) {
-    console.log(root);
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
     const zoomExtent = d3.zoom().scaleExtent([1/32, 8]).on('zoom', zoomed);
@@ -87,10 +86,8 @@ class DOMTree {
         .attr('rx', '0')
         .style('stroke', function(d) {
           return d.type;
-        })
-        .style('fill', function(d) {
-          return d.data.fill;
         });
+
     nodeEnter.append('text')
         .text(function(d) {
           return d.data.name;
@@ -155,7 +152,7 @@ class DOMTree {
           return bbox.height;
         })
         .style('fill', function(d) {
-          return d._children ? 'lightsteelblue' : '#fff';
+          return d._children ? '#fff' : d.data.color;
         });
 
     //FIX SIZING
@@ -175,6 +172,8 @@ class DOMTree {
           return 'translate(' + root.x + ',' + root.y + ')';
         })
         .remove();
+
+
 
     nodeExit.select('rect')
         .attr('width', rectW)
