@@ -7,6 +7,13 @@
   <style>
     body {
       font-family: sans-serif;
+      background-color: #efefef;
+      overflow: hidden;
+    }
+    .graph-svg-component {
+      border: 2px solid black;
+      border-radius: 4px;
+      background-color: #F4F5F5
     }
     #html-input-box {
       background-color: #002B36;
@@ -17,24 +24,20 @@
       cursor:pointer
     }
     .node rect {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 3px;
-}
+      fill: #fff;
+      stroke: steelblue;
+      stroke-width: 3px;
+    }
 
-.node text {
-  font: 12px sans-serif;
-}
+    .node text {
+      font: 12px sans-serif;
+    }
 
-.link {
-  fill: none;
-  stroke: black;
-  stroke-width: 1.5px;
-}
-
-body {
-    overflow: hidden;
-}
+    .link {
+      fill: none;
+      stroke: black;
+      stroke-width: 1.5px;
+    }
 
   </style>
 </head>

@@ -12,6 +12,7 @@ class DOMTree {
   }
 
   createAndAppendDOMTree(root) {
+    console.log(root);
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
     const zoomExtent = d3.zoom().scaleExtent([1/32, 8]).on('zoom', zoomed);
@@ -19,7 +20,7 @@ class DOMTree {
 
 
     const svg = d3.select('div#output-container').append('svg')
-        .attr('width', this.svgWidth).attr('height', this.svgHeight).call(zoomExtent)
+        .attr('width', this.svgWidth).attr('height', this.svgHeight).attr("class", "graph-svg-component").call(zoomExtent)
         .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY).scale(this.transScale)).append('g').attr('transform', 'translate(' + initialX + ',' + initialY + ')')
 
     this.plot = svg;
@@ -156,8 +157,8 @@ class DOMTree {
         .style('fill', function(d) {
           return d._children ? 'lightsteelblue' : '#fff';
         });
-        
-    //FIX SIZING 
+
+    //FIX SIZING
 
     let maxWidth = 0;
 

@@ -1,19 +1,6 @@
 /* eslint-disable require-jsdoc */
 "use strict";
 
-const docType = "HTML";
-const docMetadata = ["HEAD", "TITLE", "BASE", "LINK", "META", "STYLE"];
-const sections = ["BODY", "ARTICLE", "SECTION", "NAV", "ASIDE", "H1", "H2", "H3", "H4", "H5", "H6", "HGROUP", "HEADER", "FOOTER", "ADDRESS"]
-const grouping = ["P", "HR", "PRE", "BLOCKQUOTE", "OL", "UL", "MENU", "LI", "DL", "DT", "DD", "FIGURE", "FIGCAPTION", "MAIN", "DIV"]
-const textSemantics = ["A", "EM", "STRONG", "SMALL", "S", "CITE", "Q", "DFN", "ABBR", "RUBY", "RT", "RP", "DATA", "TIME", "CODE", "VAR", "SAMP", "KBD", "SUB", "SUP", "I",
-"B", "U", "MARK", "BDI", "BDO", "SPAN", "BR", "WBR"]
-const links = ["AREA", "ALTERNATE", "AUTHOR", "BOOKMARK", "CANONICAL", "DNS-PREFETCH", "EXTERNAL", "HELP", "ICON", "LICENSE", "MANIFEST", "MODULEPRELOAD", "NOFOLLOW", "NOREFERRER",
-"OPENER", "PINGBACK", "PRECONNECT", "PREFETCH", "PRELOAD", "PRERENDER", "SEARCH", "STYLESHEET", "TAG", "NEXT", "PREV"];
-const edits = ["INS", "DEL"];
-const embeddedContent = ["PICTURE", "SOURCE", "IMG", "SOURCE", "LINK", "IFRAME", "EMBED", "OBJECT", "PARAM", "VIDEO", "AUDIO", "TRACK", "MAP", "AREA"];
-const tabulardata = ["TABLE", "CAPTION", "COLGROUP", "COL", "TBODY", "THEAD", "TFOOT", "TR", "TD", "TH"];
-const forms = ["FORM", "LABEL", "INPUT", "BUTTON", "SELECT", "DATALIST"]
-
 //TODO: User can navigate to page/graph by link
 
 // function get(name) {
@@ -69,7 +56,7 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{name: 'HTML', children: []}];
+  const resultArray = [{name: 'HTML', children: [], type: 'doctype'}];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -78,6 +65,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
   // TODO consider if it is worth removing the helper function
   // by not hardcoding [{name: 'HTML', children: []}] because
   // the conditional below is no longer intuitive
+
   if (
     node !== undefined &&
     node !== null &&
@@ -94,6 +82,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
         parent: currentNodeParentElementName,
         children: [],
         obj: node,
+        type: determineType(currentNodeElementName),
       });
     } else if (isLeaf) {
       childrenArr.push({
@@ -101,6 +90,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
         // TODO do we need this reference?
         parent: currentNodeParentElementName,
         obj: node,
+        type: determineType(currentNodeElementName),
       });
     }
     if (!isLeaf) {
@@ -134,4 +124,52 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
       "Root node is undefined or reference to array to store the result does not exist."
     );
   }
+}
+
+function determineType(node) {
+  const docMetadata = new Set(["HEAD", "TITLE", "BASE", "LINK", "META", "STYLE"]);
+  const sections = new Set(["BODY", "ARTICLE", "SECTION", "NAV", "ASIDE", "H1", "H2", "H3", "H4", "H5", "H6", "HGROUP", "HEADER", "FOOTER", "ADDRESS"])
+  const grouping = new Set(["P", "HR", "PRE", "BLOCKQUOTE", "OL", "UL", "MENU", "LI", "DL", "DT", "DD", "FIGURE", "FIGCAPTION", "MAIN", "DIV"])
+  const textSemantics = new Set(["A", "EM", "STRONG", "SMALL", "S", "CITE", "Q", "DFN", "ABBR", "RUBY", "RT", "RP", "DATA", "TIME", "CODE", "VAR", "SAMP", "KBD", "SUB", "SUP", "I", "B", "U", "MARK", "BDI", "BDO", "SPAN", "BR", "WBR"])
+  const links = new Set(["AREA", "ALTERNATE", "AUTHOR", "BOOKMARK", "CANONICAL", "DNS-PREFETCH", "EXTERNAL", "HELP", "ICON", "LICENSE", "MANIFEST", "MODULEPRELOAD", "NOFOLLOW", "NOREFERRER", "OPENER", "PINGBACK", "PRECONNECT", "PREFETCH", "PRELOAD", "PRERENDER", "SEARCH", "STYLESHEET", "TAG", "NEXT", "PREV"]);
+  const edits = new Set(["INS", "DEL"]);
+  const embeddedContent = new Set(["PICTURE", "SOURCE", "IMG", "SOURCE", "LINK", "IFRAME", "EMBED", "OBJECT", "PARAM", "VIDEO", "AUDIO", "TRACK", "MAP", "AREA"]);
+  const tabularData = new Set(["TABLE", "CAPTION", "COLGROUP", "COL", "TBODY", "THEAD", "TFOOT", "TR", "TD", "TH"]);
+  const forms = new Set(["FORM", "LABEL", "INPUT", "BUTTON", "SELECT", "DATALIST"]);
+
+  let type;
+
+
+  switch (true) {
+    case docMetadata.has(node):
+      type = 'docMetadata';
+      break;
+    case sections.has(node):
+      type = 'sections';
+      break;
+    case grouping.has(node):
+      type = 'grouping';
+      break;
+    case textSemantics.has(node):
+      type = 'textSemantics';
+      break;
+    case links.has(node):
+      type = 'links';
+      break;
+    case edits.has(node):
+      type = 'edits';
+      break;
+    case embeddedContent.has(node):
+      type = 'embeddedContent';
+      break;
+    case tabularData.has(node):
+      type = 'tabularData';
+      break;
+    case forms.has(node):
+      type = 'forms';
+      break;
+    default:
+      type = 'other';
+  }
+  return type;
 }
