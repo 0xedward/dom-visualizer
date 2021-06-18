@@ -67,7 +67,9 @@ class DOMTree {
             d.children = null;
           } else {
             d.children = d._children;
+            d._children = null;
           }
+          d.clicked = true;
           this.update(d);
         });
 
@@ -107,6 +109,7 @@ class DOMTree {
     nodeUpdate.transition()
         .duration(this.duration)
         .attr('transform', function(d) {
+          console.log(d)
           return 'translate(' + d.x + ',' + d.y + ')';
         });
 
