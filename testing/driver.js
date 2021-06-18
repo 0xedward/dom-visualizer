@@ -10,16 +10,20 @@ testInput();
 async function testInput() {
   try {
     await driver.get("http://127.0.0.1:5500/");
-    const inputText = await driver.findElement(By.id("html-input-box"))
+    const inputText = (await driver).findElement(By.id("html-input-box"))
     const submitInput = (await driver).findElement(By.id("visualize-btn"))
+
     const sampleInput = "<test> <append>"
     inputText.sendKeys(sampleInput)
+
     await submitInput.click()
+
     await driver.quit()
   } catch (err) {
     handleError(err, driver);
   }
 }
+
 
 function handleError(err, driver) {
   console.error("Input not matched", err);
