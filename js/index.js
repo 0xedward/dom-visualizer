@@ -56,7 +56,7 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{name: 'HTML', children: [], type: 'doctype', color: '#CBEEF3'}];
+  const resultArray = [{name: 'HTML', children: [], type: 'Doctype', color: '#CBEEF3'}];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -145,43 +145,43 @@ function determineType(node) {
 
   switch (true) {
     case docMetadata.has(node):
-      type = 'docMetadata';
+      type = 'Document Metadata';
       color = '#7CA982';
       break;
     case sections.has(node):
-      type = 'sections';
+      type = 'Sections';
       color = '#E2C2FF';
       break;
     case grouping.has(node):
-      type = 'grouping';
+      type = 'Grouping Content';
       color = '#A7ADC6';
       break;
     case textSemantics.has(node):
-      type = 'textSemantics';
-      color = '#243119';
+      type = 'Text-Level Semantics';
+      color = '#5BC0EB';
       break;
     case links.has(node):
-      type = 'links';
+      type = 'Links';
       color = '#F4F4F9';
       break;
     case edits.has(node):
-      type = 'edits';
+      type = 'Edits';
       color = '#F3D9B1';
       break;
     case embeddedContent.has(node):
-      type = 'embeddedContent';
+      type = 'Embedded Content';
       color = '#311E10';
       break;
     case tabularData.has(node):
-      type = 'tabularData';
+      type = 'Tabular Data';
       color = '#759AAB';
       break;
     case forms.has(node):
-      type = 'forms';
+      type = 'Forms';
       color = '#FFE787';
       break;
     default:
-      type = 'other';
+      type = 'Other';
       color = '#3066BE';
   }
   return {'type': type, 'color': color};

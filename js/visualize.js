@@ -55,6 +55,8 @@ class DOMTree {
 
 
     // Nodes Section
+    const tooltip = d3.select('div#output-container').append('div').attr('class', 'tooltip').style('opacity', 0)
+
     const nodeEnter = node
         .enter()
         .append('g')
@@ -71,20 +73,17 @@ class DOMTree {
           }
           d.clicked = true;
           this.update(d);
-        }).on("mouseover", function(d) {
-          const g = d3.select(this);
-          var info = g.append('text')
-             .classed('info', true)
-             .attr('x', 20)
-             .attr('y', 10)
-             .text('Data:' + g._groups[0][0].__data__.data.type);
-        })
-        .on("mouseout", function() {
+        }).on("mouseover", function(event, d) {
+          const g = d3.select(this)
+          tooltip.html(g._groups[0][0].textContent.bold() +  ' HTML Type: ' + g._groups[0][0].__data__.data.type).style("background-color", "tan")
+          .style("border", "1px solid black")
+          .style("padding", "2px")
+          .style("top", event.pageY + 10 + "px")
+          .style("left", event.pageX + 10 + "px")
+          .style("opacity", 1).on("mouseout", function() {
           // Remove the info text on mouse out.
-          d3.select(this).select('text.info').remove()
-        });
-
-        ;
+          tooltip.style('opacity', 0);
+          })})
 
     // TODO: Size rectangle height and width by some factor of svgHeight and svgWidth
     // const rectH = this.svgHeight * .025;
