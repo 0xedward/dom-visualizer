@@ -178,7 +178,7 @@ function determineType(node) {
       break;
     case forms.has(node):
       type = 'forms';
-      color = '#759AAB';
+      color = '#FFE787';
       break;
     default:
       type = 'other';

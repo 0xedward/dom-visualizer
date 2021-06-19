@@ -71,7 +71,20 @@ class DOMTree {
           }
           d.clicked = true;
           this.update(d);
+        }).on("mouseover", function(d) {
+          const g = d3.select(this);
+          var info = g.append('text')
+             .classed('info', true)
+             .attr('x', 20)
+             .attr('y', 10)
+             .text('Data:' + g._groups[0][0].__data__.data.type);
+        })
+        .on("mouseout", function() {
+          // Remove the info text on mouse out.
+          d3.select(this).select('text.info').remove()
         });
+
+        ;
 
     // TODO: Size rectangle height and width by some factor of svgHeight and svgWidth
     // const rectH = this.svgHeight * .025;
@@ -109,7 +122,6 @@ class DOMTree {
     nodeUpdate.transition()
         .duration(this.duration)
         .attr('transform', function(d) {
-          console.log(d)
           return 'translate(' + d.x + ',' + d.y + ')';
         });
 
@@ -125,7 +137,6 @@ class DOMTree {
           const textElement = d3.select(this.parentNode).select('text').node();
           const bbox = textElement.getBBox();
           bbox.x -= horizontalPadding / 2;
-
           return bbox.x;
         })
         .attr('y', function(d) {
