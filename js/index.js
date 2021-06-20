@@ -1,25 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
 "use strict";
-
-//TODO: User can navigate to page/graph by link
-
-// function get(name) {
-//   if (
-//     (name = new RegExp("[?&]" + encodeURIComponent(name) + "=([^&]*)").exec(
-//       window.location.search
-//     ))
-//   )
-//     return decodeURIComponent(name[1]);
-// }
-
-// function getUserParameter() {
-//   if (window.location.search !== "") {
-//     const userParameter = get(window.location.search);
-//     document.addEventListener("DOMContentLoaded", () => {
-//       generateDOMTree(userParameter);
-//     });
-//   }
-// }
 
 let initialized = false;
 
@@ -29,14 +10,13 @@ function generateDOMTree(userInputString) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     // const DOMTreeRootNode = d3TreeData[0];
     const DOMTreeRootNode = d3TreeData;
-    let DOM;
     if (initialized === false) {
-      DOM = new DOMTree(DOMTreeRootNode);
+      new DOMTree(DOMTreeRootNode);
       initialized = true;
     } else {
       d3.select('svg').remove();
       d3.select('div.tooltip').remove();
-      DOM = new DOMTree(DOMTreeRootNode);
+      new DOMTree(DOMTreeRootNode);
     }
   } else {
     // TODO remove this exception when we add try catch block to parseHTML
@@ -57,7 +37,8 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{name: 'HTML', children: [], type: 'Doctype', color: '#CBEEF3'}];
+  const resultArray = [{name: 'HTML', children: [],
+    type: 'Doctype', color: '#CBEEF3'}];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -109,13 +90,13 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
           }
           if (currentNodeParentIndex == -1) {
             throw new Error(
-              "Algorithm failed to traverse in level order: Unable to find parent node of current node."
+                'Algorithm failed to traverse in level order: Unable to find parent node of current node.'
             );
           }
           levelOrderTraversalHelper(
-            node.children[i],
-            childrenArr[currentNodeParentIndex].children,
-            outputArray
+              node.children[i],
+              childrenArr[currentNodeParentIndex].children,
+              outputArray
           );
         } else {
           // Currently on HTML node, we need to make a different call since the reference of childrenArr.children doesn't exist
@@ -125,21 +106,21 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     }
   } else {
     throw new Error(
-      "Root node is undefined or reference to array to store the result does not exist."
+        'Root node is undefined or reference to array to store the result does not exist.'
     );
   }
 }
 
 function determineType(node) {
-  const docMetadata = new Set(["HEAD", "TITLE", "BASE", "LINK", "META", "STYLE"]);
-  const sections = new Set(["BODY", "ARTICLE", "SECTION", "NAV", "ASIDE", "H1", "H2", "H3", "H4", "H5", "H6", "HGROUP", "HEADER", "FOOTER", "ADDRESS"])
-  const grouping = new Set(["P", "HR", "PRE", "BLOCKQUOTE", "OL", "UL", "MENU", "LI", "DL", "DT", "DD", "FIGURE", "FIGCAPTION", "MAIN", "DIV"])
-  const textSemantics = new Set(["A", "EM", "STRONG", "SMALL", "S", "CITE", "Q", "DFN", "ABBR", "RUBY", "RT", "RP", "DATA", "TIME", "CODE", "VAR", "SAMP", "KBD", "SUB", "SUP", "I", "B", "U", "MARK", "BDI", "BDO", "SPAN", "BR", "WBR"])
-  const links = new Set(["AREA", "ALTERNATE", "AUTHOR", "BOOKMARK", "CANONICAL", "DNS-PREFETCH", "EXTERNAL", "HELP", "ICON", "LICENSE", "MANIFEST", "MODULEPRELOAD", "NOFOLLOW", "NOREFERRER", "OPENER", "PINGBACK", "PRECONNECT", "PREFETCH", "PRELOAD", "PRERENDER", "SEARCH", "STYLESHEET", "TAG", "NEXT", "PREV"]);
-  const edits = new Set(["INS", "DEL"]);
-  const embeddedContent = new Set(["PICTURE", "SOURCE", "IMG", "SOURCE", "LINK", "IFRAME", "EMBED", "OBJECT", "PARAM", "VIDEO", "AUDIO", "TRACK", "MAP", "AREA"]);
-  const tabularData = new Set(["TABLE", "CAPTION", "COLGROUP", "COL", "TBODY", "THEAD", "TFOOT", "TR", "TD", "TH"]);
-  const forms = new Set(["FORM", "LABEL", "INPUT", "BUTTON", "SELECT", "DATALIST"]);
+  const docMetadata = new Set(['HEAD', 'TITLE', 'BASE', 'LINK', 'META', 'STYLE']);
+  const sections = new Set(['BODY', 'ARTICLE', 'SECTION', 'NAV', 'ASIDE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HGROUP', 'HEADER', 'FOOTER', 'ADDRESS']);
+  const grouping = new Set(['P', 'HR', 'PRE', 'BLOCKQUOTE', 'OL', 'UL', 'MENU', 'LI', 'DL', 'DT', 'DD', 'FIGURE', 'FIGCAPTION', 'MAIN', 'DIV']);
+  const textSemantics = new Set(['A', 'EM', 'STRONG', 'SMALL', 'S', 'CITE', 'Q', 'DFN', 'ABBR', 'RUBY', 'RT', 'RP', 'DATA', 'TIME', 'CODE', 'VAR', 'SAMP', 'KBD', 'SUB', 'SUP', 'I', 'B', 'U', 'MARK', 'BDI', 'BDO', 'SPAN', 'BR', 'WBR']);
+  const links = new Set(['AREA', 'ALTERNATE', 'AUTHOR', 'BOOKMARK', 'CANONICAL', 'DNS-PREFETCH', 'EXTERNAL', 'HELP', 'ICON', 'LICENSE', 'MANIFEST', 'MODULEPRELOAD', 'NOFOLLOW', 'NOREFERRER', 'OPENER', 'PINGBACK', 'PRECONNECT', 'PREFETCH', 'PRELOAD', 'PRERENDER', 'SEARCH', 'STYLESHEET', 'TAG', 'NEXT', 'PREV']);
+  const edits = new Set(['INS', 'DEL']);
+  const embeddedContent = new Set(['PICTURE', 'SOURCE', 'IMG', 'SOURCE', 'LINK', 'IFRAME', 'EMBED', 'OBJECT', 'PARAM', 'VIDEO', 'AUDIO', 'TRACK', 'MAP', 'AREA']);
+  const tabularData = new Set(['TABLE', 'CAPTION', 'COLGROUP', 'COL', 'TBODY', 'THEAD', 'TFOOT', 'TR', 'TD', 'TH']);
+  const forms = new Set(['FORM', 'LABEL', 'INPUT', 'BUTTON', 'SELECT', 'DATALIST']);
 
   let type;
   let color;

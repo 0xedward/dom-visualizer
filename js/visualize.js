@@ -17,10 +17,13 @@ class DOMTree {
     const zoomExtent = d3.zoom().scaleExtent([1/32, 4]).on('zoom', zoomed);
     this.transScale = 1;
 
-
-    const svg = d3.select('div#output-container').append('svg')
-        .attr('width', this.svgWidth).attr('height', this.svgHeight).attr("class", "graph-svg-component").call(zoomExtent)
-        .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY).scale(this.transScale)).append('g').attr('transform', 'translate(' + initialX + ',' + initialY + ')')
+    const svg = d3.select('div#output-container')
+        .append('svg').attr('width', this.svgWidth)
+        .attr('height', this.svgHeight)
+        .attr('class', 'graph-svg-component').call(zoomExtent)
+        .call(d3.zoom().transform, d3.zoomIdentity.translate(initialX, initialY)
+            .scale(this.transScale)).append('g')
+        .attr('transform', 'translate(' + initialX + ',' + initialY + ')');
 
     this.plot = svg;
 
@@ -55,7 +58,8 @@ class DOMTree {
 
 
     // Nodes Section
-    const tooltip = d3.select('div#output-container').append('div').attr('class', 'tooltip').style('opacity', 0)
+    const tooltip = d3.select('div#output-container')
+        .append('div').attr('class', 'tooltip').style('opacity', 0);
 
     const nodeEnter = node
         .enter()
@@ -73,17 +77,20 @@ class DOMTree {
           }
           d.clicked = true;
           this.update(d);
-        }).on("mouseover", function(event, d) {
+        }).on('mouseover', function(event, d) {
           const g = d3.select(this)
-          tooltip.html(g._groups[0][0].textContent.bold() +  ' HTML Type: ' + g._groups[0][0].__data__.data.type).style("background-color", "tan")
-          .style("border", "1px solid black")
-          .style("padding", "2px")
-          .style("top", event.pageY + 10 + "px")
-          .style("left", event.pageX + 10 + "px")
-          .style("opacity", 1).on("mouseout", function() {
-          // Remove the info text on mouse out.
-          tooltip.style('opacity', 0);
-          })})
+          const nodeText = g._groups[0][0].textContent;
+          const nodeType = g._groups[0][0].__data__.data.type;
+          tooltip.html(`${nodeText.bold()} HTML Type: ${nodeType}`)
+              .style('background-color', 'tan')
+              .style('border', '1px solid black')
+              .style('padding', '2px')
+              .style('top', event.pageY + 10 + 'px')
+              .style('left', event.pageX + 10 + 'px')
+              .style('opacity', 1).on('mouseout', function() {
+                tooltip.style('opacity', 0);
+              });
+        });
 
     // TODO: Size rectangle height and width by some factor of svgHeight and svgWidth
     // const rectH = this.svgHeight * .025;
@@ -168,7 +175,7 @@ class DOMTree {
           return d._children ? '#fff' : d.data.color;
         });
 
-    //FIX SIZING
+    //TODO: Set initial zoom scaling based on max width of graph
 
     let maxWidth = 0;
 
@@ -185,7 +192,6 @@ class DOMTree {
           return 'translate(' + root.x + ',' + root.y + ')';
         })
         .remove();
-
 
 
     nodeExit.select('rect')
