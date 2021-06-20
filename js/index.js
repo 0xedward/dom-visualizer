@@ -4,11 +4,13 @@
 
 let initialized = false;
 
+// TODO consider if using d3.select("svg").size() == 0 instead is a good idea
+let isTreeOnDOM = false;
+
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
-    // const DOMTreeRootNode = d3TreeData[0];
     const DOMTreeRootNode = d3TreeData;
     if (initialized === false) {
       new DOMTree(DOMTreeRootNode);
@@ -23,7 +25,7 @@ function generateDOMTree(userInputString) {
     throw new Error('DOMParser failed to parse user input string');
   }
 }
-// eslint-disable-next-line no-unused-vars
+
 function parseHTML(userInputString) {
   if (userInputString !== '') {
     // TODO will userInputString ever be null?
@@ -47,7 +49,6 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
   // TODO consider if it is worth removing the helper function
   // by not hardcoding [{name: 'HTML', children: []}] because
   // the conditional below is no longer intuitive
-
   if (
     node !== undefined &&
     node !== null &&
@@ -165,6 +166,17 @@ function determineType(node) {
     default:
       type = 'Other';
       color = '#3066BE';
+    return {'type': type, 'color': color};
+ }
+}
+
+// eslint-disable-next-line no-unused-vars
+function liveUpdate() {
+  const userInputString = document.getElementById('html-input-box').value;
+  const liveUpdateCheckBox = document.getElementById('live-update-checkbox');
+  // TODO remove the check for userInputString !== "" when we wrap
+  // DOMParser api call in try-catch block
+  if (liveUpdateCheckBox.checked && userInputString !== '') {
+    generateDOMTree(userInputString);
   }
-  return {'type': type, 'color': color};
 }
