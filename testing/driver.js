@@ -18,12 +18,14 @@ async function testInput() {
 
     await submitInput.click()
 
+    const nodes = (await driver).findElement(By.xpath, '/html/body/div[2]/div[2]/svg/g/g[3]/rect')
+
+    //expect(elem)
     await driver.quit()
   } catch (err) {
     handleError(err, driver);
   }
 }
-
 
 function handleError(err, driver) {
   console.error("Input not matched", err);

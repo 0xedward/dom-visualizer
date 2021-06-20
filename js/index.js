@@ -35,6 +35,7 @@ function generateDOMTree(userInputString) {
       initialized = true;
     } else {
       d3.select('svg').remove();
+      d3.select('div.tooltip').remove();
       DOM = new DOMTree(DOMTreeRootNode);
     }
   } else {

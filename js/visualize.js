@@ -14,7 +14,7 @@ class DOMTree {
   createAndAppendDOMTree(root) {
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
-    const zoomExtent = d3.zoom().scaleExtent([1/32, 8]).on('zoom', zoomed);
+    const zoomExtent = d3.zoom().scaleExtent([1/32, 4]).on('zoom', zoomed);
     this.transScale = 1;
 
 
