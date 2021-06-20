@@ -56,11 +56,10 @@ class DOMTree {
       return d.id || (d.id = ++i);
     });
 
-
-    // Nodes Section
     const tooltip = d3.select('div#output-container')
         .append('div').attr('class', 'tooltip').style('opacity', 0);
 
+    // Nodes Section
     const nodeEnter = node
         .enter()
         .append('g')

@@ -1,5 +1,6 @@
 html {
-  font-family: monospace !important;
+  font-family: monospace;
+  text-shadow: 0 0.04em, 0.04em rgba(0, 0, 0, 0, 0.35);
 }
 body {
   font-size: 18px;
@@ -9,7 +10,7 @@ body {
 .graph-svg-component {
   border: 2px solid black;
   border-radius: 4px;
-  background-color: #F4F5F5
+  background-color: #F4F5F5;
 }
 #html-input-box {
   background-color: #002B36;
@@ -30,6 +31,20 @@ body {
   stroke-width: 1.5px;
 }
 #visualize-btn {
-  font-size: 10px;
-  font-family: arial;
+  background-color: #91C4F2;
+  /* border-radius: 0.2em; */
+  box-sizing: border-box;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-shadow: inherit;
+  text-align: center;
+}
+
+#visualize-btn:hover {
+  text-shadow: 0 0 2em rgba(255,255,255,1);
+  color: #FFFFFF;
 }
