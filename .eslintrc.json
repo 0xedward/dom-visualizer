@@ -12,5 +12,8 @@
             "impliedStrict": true
         },
         "sourceType": "module"
+    },
+    "rules": {
+        "require-jsdoc" : ["off"]
     }
 }
