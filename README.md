@@ -1,6 +1,6 @@
 # EQKL
 
-EQKL is a DOM visualizer designed for developers interested in seeing how their HTML renders onto the DOM Tree. Given any HTML, our DOM visualizer live updates the hierarchical relationship between different HTML tags along with their HTML type as specified by HTML Spec's [documentation] (https://html.spec.whatwg.org/).
+EQKL is a DOM visualizer designed for developers interested in seeing how their HTML renders onto the DOM Tree. Given any HTML, our DOM visualizer live updates the hierarchical relationship between different HTML tags along with their HTML type as specified by HTML Spec's [documentation](https://html.spec.whatwg.org/).
 
 [Demo](https://0xedward.github.io/EQKL/)
 
@@ -21,7 +21,7 @@ npm start
 1. (Add HTML to input)[https://imgur.com/a/FfP9SDm] with optional Live Update.
 2. Tree graph renders onto output.
 
-![Figure 1-1](https://imgur.com/a/M49GuaA "Figure 1-1")
+![Figure 1-1](https://i.imgur.com/coOXwPj.png)
 
 
 # Technologies and Dependencies
