@@ -2,24 +2,28 @@ html {
   font-family: monospace;
   text-shadow: 0 0.04em, 0.04em rgba(0, 0, 0, 0, 0.35);
 }
+
 body {
   font-size: 18px;
   background-color: #efefef;
   overflow: hidden;
 }
+
 .graph-svg-component {
   border: 2px solid black;
   border-radius: 4px;
-  background-color: #F4F5F5;
-}
-#html-input-box {
-  background-color: #002B36;
-  color: white
+  background-color: #f4f5f5;
 }
 
-.node{
-  cursor:pointer
+#html-input-box {
+  background-color: #002b36;
+  color: white;
 }
+
+.node {
+  cursor: pointer;
+}
+
 .node rect {
   fill: #fff;
   stroke: steelblue;
@@ -30,8 +34,9 @@ body {
   stroke: black;
   stroke-width: 1.5px;
 }
+
 #visualize-btn {
-  background-color: #91C4F2;
+  background-color: #91c4f2;
   box-sizing: border-box;
   color: white;
   font-family: inherit;
@@ -44,6 +49,6 @@ body {
 }
 
 #visualize-btn:hover {
-  text-shadow: 0 0 2em rgba(255,255,255,1);
-  color: #FFFFFF;
+  text-shadow: 0 0 2em rgba(255, 255, 255, 1);
+  color: #fff;
 }
