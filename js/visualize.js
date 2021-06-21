@@ -36,7 +36,7 @@ function createAndAppendDOMTree(root) {
       })
       .on('collapseNodes', collapseNodes);
 
-  nodeEnter.append('circle').attr('r', 10).style('fill', '#00FFFF');
+  nodeEnter.append('circle').attr('r', 10);
 
   nodeEnter
       .append('text')
