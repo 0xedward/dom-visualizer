@@ -5,6 +5,37 @@
   <meta charset="utf-8">
   <title>DOM Visualizer</title>
   <style>
+    body {
+      font: 13px/13px Arial;
+      background-color: #f1f1f1;
+      margin: 20px;
+    }
+
+    rect {
+      fill: #ddd;
+    }
+
+    .remove-icon {
+      fill: #eee;
+    }
+
+    .remove-icon-group {
+      cursor: pointer;
+    }
+
+    .remove-icon-group:hover .remove-icon {
+      fill: #fff;
+    }
+
+    .line {
+      position: relative;
+      z-index: 0;
+    }
+
+    .node {
+      cursor: pointer;
+    }
+
     .node circle {
       fill: #fff;
       stroke: steelblue;
@@ -27,9 +58,11 @@
   <div style="display:flex; flex-direction: row;">
     <div style="padding-right: 2.5vw;">
       <label for="html-input-box">Input HTML below:</label><br><br>
-      <textarea id="html-input-box" style="width: 45vw; height: 85vh;"></textarea><br><br>
+      <textarea id="html-input-box" onkeydown="liveUpdate()" style="width: 45vw; height: 85vh;"></textarea><br><br>
       <button id="visualize-btn" type="button"
-        onclick="generateDOMTree(document.getElementById('html-input-box').value)">Visualize</button>
+        onclick="generateDOMTree(document.getElementById('html-input-box').value);">Visualize</button><br><br>
+      <input type="checkbox" id="live-update-checkbox">
+      <label for="live-update-checkbox">Live Update</label>
     </div>
     <div id="output-container" style="padding-left: 2.5vw;">
       <label for="dom-tree-output">DOM Tree View</label><br><br>
