@@ -18,7 +18,7 @@ npm start
 
 # Usage
 
-1. (Add HTML to input)[https://imgur.com/a/FfP9SDm] with optional Live Update.
+1. [Add HTML to input](https://imgur.com/a/FfP9SDm) with optional Live Update.
 2. Tree graph renders onto output.
 
 ![Figure 1-1](https://i.imgur.com/coOXwPj.png)
