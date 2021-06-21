@@ -13,7 +13,9 @@
     "url": "git+https://github.com/0xedward/EQKL.git"
   },
   "author": "0xedward",
-  "contributors": ["kelvinlin97"],
+  "contributors": [
+    "kelvinlin97"
+  ],
   "bugs": {
     "url": "https://github.com/0xedward/EQKL/issues"
   },
@@ -21,6 +23,8 @@
   "devDependencies": {
     "eslint": "^7.17.0",
     "eslint-config-google": "^0.14.0",
-    "live-server": "1.2.1"
+    "live-server": "1.2.1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0"
   }
 }
