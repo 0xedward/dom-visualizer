@@ -24,11 +24,6 @@ body {
   cursor: pointer;
 }
 
-.node circle {
-  stroke: steelblue;
-  fill: #FFFFFF;
-}
-
 .link {
   fill: none;
   stroke: black;
