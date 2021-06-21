@@ -18,7 +18,7 @@ npm start
 
 # Usage
 
-1. (Add HTML to input)[https://imgur.com/a/FfP9SDm] with optional Live Update.
+1. [Add HTML to input](https://imgur.com/a/FfP9SDm) with optional Live Update.
 2. Tree graph renders onto output.
 
 ![Figure 1-1](https://i.imgur.com/coOXwPj.png)
@@ -26,9 +26,13 @@ npm start
 
 # Technologies and Dependencies
 [D3.js](https://d3js.org/)
+
 [Node.js](https://nodejs.org/en/)
+
 [ESLint](https://eslint.org/)
+
 [stylelint](https://stylelint.io/)
+
 [Selenium](https://www.selenium.dev/)
 
 
