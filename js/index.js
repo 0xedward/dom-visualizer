@@ -9,10 +9,9 @@ function generateDOMTree(userInputString) {
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData;
-    let initialized = false;
-    if (initialized === false) {
+
+    if (d3.select('svg').size() === 0) {
       new DOMTree(DOMTreeRootNode);
-      initialized = true;
     } else {
       d3.select('svg').remove();
       d3.select('div.tooltip').remove();
@@ -112,7 +111,6 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
 }
 
 function determineType(node) {
-  console.log(node)
   const document = 'HTML';
   const docMetadata = new Set(['HEAD', 'TITLE', 'BASE', 'LINK', 'META', 'STYLE']);
   const sections = new Set(['BODY', 'ARTICLE', 'SECTION', 'NAV', 'ASIDE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HGROUP', 'HEADER', 'FOOTER', 'ADDRESS']);
