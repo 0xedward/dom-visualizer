@@ -24,8 +24,9 @@ body {
   cursor: pointer;
 }
 
-.node rect {
+.node circle {
   stroke: steelblue;
+  fill: #FFFFFF;
 }
 
 .link {
