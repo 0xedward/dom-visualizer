@@ -57,7 +57,7 @@ function createAndAppendDOMTree(root) {
         return 'translate(' + d.x + ',' + d.y + ')';
       });
 
-  nodeEnter.append('circle').attr('r', 10).style('fill', '#fff');
+  nodeEnter.append('circle').attr('r', 10).style('fill', '#00FFFF');
 
   nodeEnter
       .append('text')
