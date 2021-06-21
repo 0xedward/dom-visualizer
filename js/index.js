@@ -2,16 +2,14 @@
 /* eslint-disable require-jsdoc */
 "use strict";
 
-let initialized = false;
-
 // TODO consider if using d3.select("svg").size() == 0 instead is a good idea
-let isTreeOnDOM = false;
 
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
   if (parserOutputNode !== null) {
     const d3TreeData = levelOrderTraversal(parserOutputNode);
     const DOMTreeRootNode = d3TreeData;
+    let initialized = false;
     if (initialized === false) {
       new DOMTree(DOMTreeRootNode);
       initialized = true;
@@ -60,6 +58,7 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     const currentNodeElementName = node.tagName;
     const currentNodeParentElementName = node.parentNode.tagName;
     const {type, color} = determineType(currentNodeElementName);
+
     if (isNotHTMLNode) {
       childrenArr.push({
         name: currentNodeElementName,
@@ -113,6 +112,8 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
 }
 
 function determineType(node) {
+  console.log(node)
+  const document = 'HTML';
   const docMetadata = new Set(['HEAD', 'TITLE', 'BASE', 'LINK', 'META', 'STYLE']);
   const sections = new Set(['BODY', 'ARTICLE', 'SECTION', 'NAV', 'ASIDE', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HGROUP', 'HEADER', 'FOOTER', 'ADDRESS']);
   const grouping = new Set(['P', 'HR', 'PRE', 'BLOCKQUOTE', 'OL', 'UL', 'MENU', 'LI', 'DL', 'DT', 'DD', 'FIGURE', 'FIGCAPTION', 'MAIN', 'DIV']);
@@ -127,6 +128,10 @@ function determineType(node) {
   let color;
 
   switch (true) {
+    case document === node:
+      type = 'Document Type';
+      color = '#FFFFFF';
+      break;
     case docMetadata.has(node):
       type = 'Document Metadata';
       color = '#7CA982';
@@ -166,8 +171,8 @@ function determineType(node) {
     default:
       type = 'Other';
       color = '#3066BE';
-    return {'type': type, 'color': color};
- }
+  }
+  return {'type': type, 'color': color};
 }
 
 // eslint-disable-next-line no-unused-vars

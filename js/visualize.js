@@ -5,7 +5,7 @@ class DOMTree {
   constructor(data) {
     this.data = data;
     this.svgWidth = screen.availWidth / 2.1;
-    this.svgHeight = screen.availHeight * .8; ;
+    this.svgHeight = screen.availHeight * .7; ;
     this.duration = 500;
     // TODO remove function call that doesn't set something to a variable in constructor
     this.createAndAppendDOMTree(data);
