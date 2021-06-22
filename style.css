@@ -15,11 +15,6 @@ body {
   background-color: #f4f5f5;
 }
 
-#html-input-box {
-  background-color: #002b36;
-  color: white;
-}
-
 .node {
   cursor: pointer;
 }

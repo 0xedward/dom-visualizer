@@ -14,7 +14,9 @@ class DOMTree {
   createAndAppendDOMTree(root) {
     const initialX = this.svgWidth / 2;
     const initialY = this.svgHeight * .05;
-    const zoomExtent = d3.zoom().scaleExtent([1/32, 4]).on('zoom', zoomed);
+    const zoomExtent = d3.zoom().scaleExtent([1/32, 4]).on('zoom', (event) => {
+      svg.attr('transform', event.transform);
+    });
     this.transScale = 1;
 
     const svg = d3.select('div#output-container')
@@ -26,10 +28,6 @@ class DOMTree {
         .attr('transform', 'translate(' + initialX + ',' + initialY + ')');
 
     this.plot = svg;
-
-    function zoomed(event) {
-      svg.attr('transform', event.transform);
-    }
     // TODO: Bug - some node are still off-centered
     this.tree = d3.tree().nodeSize([80, 20]);
     this.treeRoot = d3.hierarchy(root[0], function(d) {
@@ -214,7 +212,7 @@ class DOMTree {
         .attr('class', 'link')
         .attr('d', function(d) {
           const o = {x: root.x0, y: root.y0};
-          return diagonal(o, o);
+          return DOMTree.diagonal(o, o);
         });
 
     const linkUpdate = linkEnter
@@ -223,23 +221,22 @@ class DOMTree {
     linkUpdate.transition()
         .duration(this.duration)
         .attr('d', function(d) {
-          return diagonal(d, d.parent);
+          return DOMTree.diagonal(d, d.parent);
         });
 
     link.exit().transition()
         .duration(this.duration)
         .attr('d', function(d) {
           const o = {x: root.x, y: root.y};
-          return diagonal(o, o);
+          return DOMTree.diagonal(o, o);
         })
         .remove();
-
-    function diagonal(s, d) {
-      const path = `M ${s.x} ${s.y}
-        C ${(s.x + d.x) / 2} ${s.y},
-          ${(s.x + d.x) / 2} ${d.y},
-          ${d.x} ${d.y}`;
-      return path;
-    }
+  }
+  static diagonal(s, d) {
+    const path = `M ${s.x} ${s.y}
+      C ${(s.x + d.x) / 2} ${s.y},
+        ${(s.x + d.x) / 2} ${d.y},
+        ${d.x} ${d.y}`;
+    return path;
   }
 }
