@@ -8,16 +8,16 @@
 </head>
 
 <body>
-  <div style="display:flex; flex-direction: row;">
-    <div style="padding-right: 2.5vw;">
+  <div id="page">
+    <div id="input-container">
       <label for="html-input-box">Input HTML below:</label><br><br>
-      <textarea id="html-input-box" onkeydown="liveUpdate()" style="width: 45vw; height: 85vh;"></textarea><br><br>
+      <textarea id="html-input-box" onkeydown="liveUpdate()"></textarea><br><br>
       <button id="visualize-btn" type="button"
         onclick="generateDOMTree(document.getElementById('html-input-box').value);">Visualize</button><br><br>
       <input type="checkbox" id="live-update-checkbox">
       <label for="live-update-checkbox">Live Update</label>
     </div>
-    <div id="output-container" style="padding-left: 2.5vw;">
+    <div id="output-container">
       <label for="dom-tree-output">DOM Tree View</label><br><br>
     </div>
   </div>

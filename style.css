@@ -9,15 +9,15 @@ body {
   overflow: hidden;
 }
 
+#page {
+  display: flex; 
+  flex-direction: row;
+} 
+
 .graph-svg-component {
   border: 2px solid black;
   border-radius: 4px;
   background-color: #f4f5f5;
-}
-
-#html-input-box {
-  background-color: #002b36;
-  color: white;
 }
 
 .node {
@@ -28,6 +28,21 @@ body {
   fill: none;
   stroke: black;
   stroke-width: 1.5px;
+}
+
+#html-input-box {
+  width: 45vw; 
+  height: 75vh; 
+  background-color: #002b36; 
+  color: white;
+}
+
+#input-container {
+  padding-right: 2.5vw;
+} 
+
+#output-container {
+  padding-left: 2.5vw;
 }
 
 #visualize-btn {
