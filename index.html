@@ -11,7 +11,7 @@
   <div style="display:flex; flex-direction: row;">
     <div style="padding-right: 2.5vw;">
       <label for="html-input-box">Input HTML below:</label><br><br>
-      <textarea id="html-input-box" onkeydown="liveUpdate()" style="width: 45vw; height: 75vh; background-color: #002b36; color: white"></textarea><br><br>
+      <textarea id="html-input-box" onkeydown="liveUpdate()"></textarea><br><br>
       <button id="visualize-btn" type="button"
         onclick="generateDOMTree(document.getElementById('html-input-box').value);">Visualize</button><br><br>
       <input type="checkbox" id="live-update-checkbox">
