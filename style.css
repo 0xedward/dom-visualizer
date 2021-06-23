@@ -25,6 +25,13 @@ body {
   stroke-width: 1.5px;
 }
 
+#html-input-box {
+  width: 45vw; 
+  height: 75vh; 
+  background-color: #002b36; 
+  color: white
+}
+
 #visualize-btn {
   background-color: #91c4f2;
   box-sizing: border-box;
