@@ -1,16 +1,13 @@
-# EQKL
+# DOM Visualizer
+<p align=center>
+  <img alt="DOM Visualizer sample output" src="https://user-images.githubusercontent.com/14011954/126092728-32be88a1-b0b9-4022-9f18-3c85195d325e.png"/><br>
+</p>
 
-EQKL is a DOM visualizer designed for developers interested in seeing how their HTML renders onto the DOM Tree. Given any HTML, our DOM visualizer live updates the hierarchical relationship between different HTML tags along with their HTML type as specified by HTML Spec's [documentation](https://html.spec.whatwg.org/).
+[DOM Visualizer](https://0xedward.github.io/dom-visualizer/) was created for developers to view the DOM created by their browser for any HTML input. DOM Visualizer creates and displays the hierarchical relationship between different HTML tags.
 
-[Demo](https://0xedward.github.io/EQKL/)
 
-# Usage
-
-1. [Add HTML to input](https://imgur.com/a/FfP9SDm) with optional Live Update.
-2. Tree graph renders onto output.
-
-![Figure 1-1](https://i.imgur.com/coOXwPj.png)
-
+# Supported Browsers
+DOM Visualizer relies on the [DOMParser API](https://caniuse.com/xml-serializer) to parse HTML input strings. Currently most browsers are supported except for Opera Mini.
 
 # Technologies and Dependencies
 [D3.js](https://d3js.org/)
@@ -23,12 +20,14 @@ EQKL is a DOM visualizer designed for developers interested in seeing how their 
 
 [Selenium](https://www.selenium.dev/)
 
-
 # Development Setup
-1. Clone the repository
-2. Install dependencies 
+1. Clone the repository:
 ```
-cd EQKL && npm install
+git clone https://github.com/0xedward/dom-visualizer.git
+```
+2. Install development dependencies
+```
+cd dom-visualizer && npm install
 ```
 3. Start server with live reload
 ```
