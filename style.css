@@ -1,0 +1,64 @@
+html {
+  font-family: monospace;
+  text-shadow: 0 0.04em, 0.04em rgba(0, 0, 0, 0, 0.35);
+}
+
+body {
+  font-size: 18px;
+  background-color: #efefef;
+  overflow: hidden;
+}
+
+#page {
+  display: flex; 
+  flex-direction: row;
+} 
+
+.graph-svg-component {
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: #f4f5f5;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.link {
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
+#html-input-box {
+  width: 45vw; 
+  height: 75vh; 
+  background-color: #002b36; 
+  color: white;
+}
+
+#input-container {
+  padding-right: 2.5vw;
+} 
+
+#output-container {
+  padding-left: 2.5vw;
+}
+
+#visualize-btn {
+  background-color: #91c4f2;
+  box-sizing: border-box;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-shadow: inherit;
+  text-align: center;
+}
+
+#visualize-btn:hover {
+  text-shadow: 0 0 2em rgba(255, 255, 255, 1);
+  color: #fff;
+}
