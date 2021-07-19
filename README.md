@@ -9,7 +9,7 @@
 DOM Visualizer relies on the [DOMParser API](https://caniuse.com/xml-serializer) to parse HTML input strings. Currently, most browsers are supported except for Opera Mini.
 
 # Development Setup
-1. Clone the repository:
+1. Clone the repository
 ```
 git clone https://github.com/0xedward/dom-visualizer.git
 ```
