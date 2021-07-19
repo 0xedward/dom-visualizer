@@ -10,14 +10,14 @@ DOM Visualizer relies on the [DOMParser API](https://caniuse.com/xml-serializer)
 
 # Development Setup
 1. Clone the repository
-```
+```bash
 git clone https://github.com/0xedward/dom-visualizer.git
 ```
 2. Install development dependencies
-```
+```bash
 cd dom-visualizer && npm install
 ```
 3. Start server with live reload
-```
+```bash
 npm start
 ```
