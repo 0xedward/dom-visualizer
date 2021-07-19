@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line no-unused-vars
 class DOMTree {
   constructor(data) {
     this.data = data;
@@ -74,7 +75,7 @@ class DOMTree {
           d.clicked = true;
           this.update(d);
         }).on('mouseover', function(event, d) {
-          const g = d3.select(this)
+          const g = d3.select(this);
           const nodeText = g._groups[0][0].textContent;
           const nodeType = g._groups[0][0].__data__.data.type;
           tooltip.html(`${nodeText.bold()} HTML Type: ${nodeType}`)
@@ -155,8 +156,7 @@ class DOMTree {
           bbox.width += horizontalPadding;
           if (nodeWidths[d.depth] === undefined) {
             nodeWidths[d.depth] = bbox.width;
-          }
-          else {
+          } else {
             nodeWidths[d.depth] += bbox.width;
           }
           return bbox.width;
@@ -171,7 +171,7 @@ class DOMTree {
           return d._children ? '#fff' : d.data.color;
         });
 
-    //TODO: Set initial zoom scaling based on max width of graph
+    // TODO: Set initial zoom scaling based on max width of graph
 
     let maxWidth = 0;
 

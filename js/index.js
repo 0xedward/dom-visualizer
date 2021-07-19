@@ -1,8 +1,4 @@
-
-/* eslint-disable max-len */
-"use strict";
-
-// TODO consider if using d3.select("svg").size() == 0 instead is a good idea
+'use strict';
 
 function generateDOMTree(userInputString) {
   const parserOutputNode = parseHTML(userInputString);
@@ -27,7 +23,7 @@ function parseHTML(userInputString) {
   if (userInputString !== '') {
     // TODO will userInputString ever be null?
     const parser = new DOMParser();
-    // TODO error check parseFromString - adapt to different browsers - https://developer.mozilla.org/en-US/docs/Web/API/DOMParser#DOMParser_HTML_extension
+    // TODO error check parseFromString
     const htmlDocument = parser.parseFromString(userInputString, 'text/html');
     return htmlDocument.documentElement;
   }
@@ -36,8 +32,12 @@ function parseHTML(userInputString) {
 
 function levelOrderTraversal(rootNode) {
   // Level order traverse the output of DOMParser
-  const resultArray = [{name: 'HTML', children: [],
-    type: 'Doctype', color: '#CBEEF3'}];
+  const resultArray = [{
+    name: 'HTML',
+    children: [],
+    type: 'Doctype',
+    color: '#CBEEF3',
+  }];
   levelOrderTraversalHelper(rootNode, resultArray[0].children, resultArray);
   return resultArray;
 }
@@ -56,7 +56,10 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
     const isNotHTMLNode = node.parentNode.nodeName !== '#document';
     const currentNodeElementName = node.tagName;
     const currentNodeParentElementName = node.parentNode.tagName;
-    const {type, color} = determineType(currentNodeElementName);
+    const {
+      type,
+      color,
+    } = determineType(currentNodeElementName);
 
     if (isNotHTMLNode) {
       childrenArr.push({
@@ -98,7 +101,8 @@ function levelOrderTraversalHelper(node, childrenArr, outputArray) {
               outputArray
           );
         } else {
-          // Currently on HTML node, we need to make a different call since the reference of childrenArr.children doesn't exist
+          // On document root node, we need to make pass different params to levelOrderTraversalHelper
+          // since reference to childrenArr.children doesn't exist
           levelOrderTraversalHelper(node.children[i], childrenArr, outputArray);
         }
       }
@@ -170,7 +174,10 @@ function determineType(node) {
       type = 'Other';
       color = '#3066BE';
   }
-  return {'type': type, 'color': color};
+  return {
+    'type': type,
+    'color': color,
+  };
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -183,4 +190,3 @@ function liveUpdate() {
     generateDOMTree(userInputString);
   }
 }
-
