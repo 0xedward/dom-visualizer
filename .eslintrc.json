@@ -15,6 +15,11 @@
         "sourceType": "module"
     },
     "rules": {
+        "max-len": ["error", {
+            "comments": 120,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true
+        }],
         "require-jsdoc" : ["off"]
     }
 }
