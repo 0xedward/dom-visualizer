@@ -1,6 +1,5 @@
 
 /* eslint-disable max-len */
-/* eslint-disable require-jsdoc */
 "use strict";
 
 // TODO consider if using d3.select("svg").size() == 0 instead is a good idea

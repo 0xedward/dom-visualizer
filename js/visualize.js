@@ -1,5 +1,4 @@
-/* eslint-disable require-jsdoc */
-// eslint-disable-next-line require-jsdoc
+'use strict';
 
 class DOMTree {
   constructor(data) {
