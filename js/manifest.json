@@ -1,0 +1,10 @@
+{
+  "name": "DOM Tree Visualizer",
+  "description": "Visualize your HTML in the DOM Tree!",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "devtools.js"
+  },
+  "permissions": []
+}
