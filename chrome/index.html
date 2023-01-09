@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://d3js.org">
+  <title>DOM Visualizer</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+  <div id="page">
+    <div id="input-container">
+      <label for="html-input-box">Input HTML below:</label><br><br>
+      <textarea id="html-input-box" onkeydown="liveUpdate()"></textarea><br><br>
+      <button id="visualize-btn" type="button"
+        onclick="generateDOMTree(document.getElementById('html-input-box').value);">Visualize</button><br><br>
+    <div id="output-container">
+      <label for="dom-tree-output">DOM Tree View</label><br><br>
+    </div>
+  </div>
+
+  <script src="../js/index.js"></script>
+  <script src="../js/visualize.js"></script>
+
+  <script defer src="https://d3js.org/d3-hierarchy.v2.min.js"
+    integrity="sha384-MdaUeYF7gHVN8QFU257bd8KI0ROof9MWr+gcDkF7U/B06AnkV7ySOAkPyOZac9Uh" crossorigin="anonymous">
+  </script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.1/d3.min.js"
+    integrity="sha512-9H86d5lhAwgf2/u29K4N5G6pZThNOojI8kMT4nT4NHvVR02cM85M06KJRQXkI0XgQWBpzQyIyr8LVomyu1AQdw=="
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
